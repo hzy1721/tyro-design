@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { CheckboxProps } from '../Checkbox/interface';
 import { PaginationProps } from '../Pagination/interface';
 import { BaseProps } from '../util/baseProps';
 
@@ -12,7 +13,7 @@ export interface RenderObject {
 
 export interface TableColumn {
   dataIndex: string;
-  title: string;
+  title: ReactNode;
   align?: 'left' | 'center' | 'right';
   render?: (value: any, record: any, index: number) => ReactNode | RenderObject;
   width?: number | string;
@@ -37,7 +38,9 @@ export interface TableRecord {
 
 export interface TableRowSelection {
   disabled?: boolean;
-  // getCheckboxProps?: (record: TableRecord) => CheckboxProps;
+  getCheckboxProps?: (record: TableRecord) => CheckboxProps;
+  onSelect?: (record: TableRecord, selected: boolean) => void;
+  onSelectAll?: (selected: boolean) => void;
 }
 
 export interface TableProps extends BaseProps {

@@ -83,6 +83,81 @@ export default () => <Table columns={columns} dataSource={dataSource} />;
 
 ## 行选择
 
+传入`rowSelection`使用行选择。
+
+- `disabled`描述表头的全选 Checkbox 是否禁用，`getCheckboxProps`描述每一行的 Checkbox 是否禁用。
+- `onSelectAll`为表头 Checkbox 的变化回调函数，`onSelect`为表格每一行 Checkbox 的变化回调函数。
+- **必须**指定`key`或`rowKey`，使每条数据能够通过一个主键唯一地索引。
+
+```jsx
+import { Table } from 'tyro-design';
+
+const columns = [
+  {
+    dataIndex: 'groupId',
+    title: '队伍 ID',
+  },
+  {
+    dataIndex: 'groupName',
+    title: '队伍名称',
+    align: 'center',
+  },
+  {
+    dataIndex: 'groupMemberNum',
+    title: '队伍人数',
+    align: 'right',
+  },
+  {
+    dataIndex: 'groupScore',
+    title: '队伍成绩',
+    align: 'left',
+    width: 400,
+  },
+];
+
+const dataSource = [
+  {
+    key: '1',
+    groupId: 1111,
+    groupName: 'SSR 小队',
+    groupMemberNum: 3,
+    groupScore: 80,
+  },
+  {
+    key: '2',
+    groupId: 2222,
+    groupName: '组件库小队',
+    groupMemberNum: 4,
+    groupScore: 85,
+  },
+  {
+    key: '3',
+    groupId: 3333,
+    groupName: '可视化小队',
+    groupMemberNum: 5,
+    groupScore: 90,
+  },
+];
+
+export default () => (
+  <Table
+    columns={columns}
+    dataSource={dataSource}
+    rowSelection={{
+      getCheckboxProps: (record) => ({
+        disabled: record.key === '2',
+      }),
+      onSelect: (record, selected) => {
+        alert(`${selected ? '选中了' : '取消选中'} ${record.groupId} 小组`);
+      },
+      onSelectAll: (selected) => {
+        alert(`${selected ? '全选成功' : '取消全选'}`);
+      },
+    }}
+  />
+);
+```
+
 ## 分页
 
 传入`pagination`添加分页组件，可参考`Pagination`组件的 API。

@@ -1,8 +1,16 @@
 import { IconTriangleDown, IconTriangleUp } from '@douyinfe/semi-icons';
 import classNames from 'classnames';
+import { cloneDeep } from 'lodash';
 import React, { CSSProperties, FC, useMemo, useState } from 'react';
+import Checkbox from '../Checkbox';
 import Pagination from '../Pagination/index';
-import { SortInfo, SortOrder, TableColumn, TableProps } from './interface';
+import {
+  SortInfo,
+  SortOrder,
+  TableColumn,
+  TableProps,
+  TableRecord,
+} from './interface';
 
 import './style/index.less';
 
@@ -11,18 +19,49 @@ const Table: FC<TableProps> = (props) => {
     columns = [],
     dataSource = [],
     rowKey = 'key',
+    rowSelection,
     pagination,
     onHeaderRow,
     onRow,
     className,
     style,
   } = props;
+
+  const getRecordKey = (record: TableRecord) =>
+    typeof rowKey === 'function' ? record[rowKey(record)] : record[rowKey];
+  const {
+    disabled: headCheckboxDisabled,
+    getCheckboxProps,
+    onSelect,
+    onSelectAll,
+  } = rowSelection ?? {};
+  const rowDisabled = useMemo(() => {
+    const map = new Map<string, boolean>();
+    dataSource.forEach((record) => {
+      const key = getRecordKey(record);
+      const disabled = getCheckboxProps
+        ? getCheckboxProps(record).disabled ?? false
+        : false;
+      key && map.set(key, disabled);
+    });
+    return map;
+  }, [dataSource, rowKey]);
+  const [selectedMap, setSelectedMap] = useState(() => {
+    const map = new Map<string, boolean>();
+    dataSource.forEach((record) => {
+      const key = getRecordKey(record);
+      key && map.set(key, false);
+    });
+    return map;
+  });
+
   const {
     pageSize = 10,
     defaultCurrentPage = 1,
     onPageChange,
   } = pagination ?? {};
   const [page, setPage] = useState(defaultCurrentPage);
+
   const [sortInfo, setSortInfo] = useState<SortInfo>();
 
   const genColStyle = (column: TableColumn) => {
@@ -128,7 +167,6 @@ const Table: FC<TableProps> = (props) => {
       }
     }
     const { rowSpan, colSpan } = renderProps;
-    console.log(content);
 
     return rowSpan === 0 || colSpan === 0 ? null : (
       <td
@@ -143,6 +181,46 @@ const Table: FC<TableProps> = (props) => {
       </td>
     );
   };
+
+  const tableColumns = useMemo(() => {
+    const cols = cloneDeep(columns);
+    if (rowSelection) {
+      cols.unshift({
+        dataIndex: 'rowSelection',
+        title: (
+          <Checkbox
+            disabled={headCheckboxDisabled}
+            onChange={(checked) => {
+              const newSelectMap = cloneDeep(selectedMap);
+              newSelectMap.forEach((value, key) => {
+                if (rowDisabled.get(key) === false) {
+                  newSelectMap.set(key, checked);
+                }
+              });
+              setSelectedMap(newSelectMap);
+              onSelectAll && onSelectAll(checked);
+            }}
+          />
+        ),
+        render: (value, record) => (
+          <Checkbox
+            {...(getCheckboxProps ? getCheckboxProps(record) : {})}
+            checked={selectedMap.get(getRecordKey(record)) ?? false}
+            onChange={(checked) => {
+              const key = getRecordKey(record);
+              if (key) {
+                const newSelectedMap = cloneDeep(selectedMap);
+                newSelectedMap.set(key, checked);
+                setSelectedMap(newSelectedMap);
+              }
+              onSelect && onSelect(record, checked);
+            }}
+          />
+        ),
+      });
+    }
+    return cols;
+  }, [columns, rowSelection, selectedMap]);
 
   const tableData = useMemo(() => {
     let data = dataSource;
@@ -162,13 +240,13 @@ const Table: FC<TableProps> = (props) => {
     <div className={classNames('tyro-table-wrapper', className)} style={style}>
       <table className="tyro-table">
         <colgroup>
-          {columns.map((column) => (
+          {tableColumns.map((column) => (
             <col key={column.dataIndex} style={genColStyle(column)} />
           ))}
         </colgroup>
         <thead className="tyro-table-header">
           <tr {...(onHeaderRow ? onHeaderRow(columns) : {})}>
-            {columns.map((column, index) => renderHeadCell(column, index))}
+            {tableColumns.map((column, index) => renderHeadCell(column, index))}
           </tr>
         </thead>
         <tbody
@@ -177,14 +255,10 @@ const Table: FC<TableProps> = (props) => {
         >
           {tableData.map((record, rowIndex) => (
             <tr
-              key={
-                (typeof rowKey === 'function'
-                  ? record[rowKey(record)]
-                  : record[rowKey]) ?? rowIndex
-              }
+              key={getRecordKey(record) ?? rowIndex}
               {...(onRow ? onRow(record, rowIndex) : {})}
             >
-              {columns.map((column, columnIndex) =>
+              {tableColumns.map((column, columnIndex) =>
                 renderBodyCell(column, record, rowIndex, columnIndex),
               )}
             </tr>
