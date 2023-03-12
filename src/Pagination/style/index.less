@@ -1,0 +1,78 @@
+@import './variable.less';
+
+.tyro-pagination {
+  display: flex;
+  align-items: center;
+  user-select: none;
+
+  &-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: @color-pagination-text-default;
+  }
+
+  &-total {
+    margin-right: 5px;
+  }
+
+  &-item {
+    color: @color-pagination_item-text-default;
+    background-color: @color-pagination_item-bg-default;
+    border-width: @width-pagination_item_border;
+    border-style: solid;
+    border-color: @color-pagination_item-border-default;
+    font-size: 14px;
+    font-weight: @font-pagination_item-fontWeight;
+    height: @height-pagination_item;
+    border-radius: @radius-pagination_item;
+    padding: @spacing-pagination-padding;
+    margin-left: @spacing-pagination_item-marginLeft;
+    margin-right: @spacing-pagination_item-marginRight;
+    min-width: @width-pagination_item-minWidth;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    svg {
+      color: @color-pagination_item-icon-default;
+    }
+
+    &:hover {
+      color: @color-pagination_item-text-hover;
+      background-color: @color-pagination_item-bg-hover;
+      border-color: @color-pagination_item-border-hover;
+    }
+
+    &:active {
+      color: @color-pagination_item-text-active;
+      background-color: @color-pagination_item-bg-active;
+      border-color: @color-pagination_item-border-active;
+    }
+
+    &-disabled,
+    &-disabled:hover {
+      color: @color-pagination_item-text-disabled;
+      background-color: @color-pagination_item-bg-disabled;
+      border-color: @color-pagination_item-border-disabled;
+      cursor: not-allowed;
+
+      svg {
+        color: @color-pagination_item-icon-disabled;
+      }
+    }
+
+    &-active,
+    &-active:hover {
+      color: @color-pagination_item-text-selected;
+      background-color: @color-pagination_item-bg-selected;
+      border-color: @color-pagination_item-border-selected;
+      font-weight: @font-pagination_item_active-fontWeight;
+    }
+
+    &-small {
+      min-width: 44px;
+    }
+  }
+}

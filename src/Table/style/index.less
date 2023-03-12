@@ -1,0 +1,103 @@
+@import './variable.less';
+
+.tyro-table {
+  color: @color-table-text-default;
+  background-color: @color-table-bg-default;
+  font-size: @font-table_base-fontSize;
+  border-spacing: 0;
+  text-align: left;
+  width: 100%;
+
+  &-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  &-header {
+    color: @color-table_th-text-default;
+    background-color: @color-table_th-bg-default;
+
+    th {
+      padding: @spacing-table_th-paddingY @spacing-table_th-paddingX;
+      border-bottom: @width-table_header_border solid
+        @color-table_th-border-default;
+    }
+
+    th[colspan]:not([colspan='1']) {
+      text-align: center;
+    }
+
+    th.tyro-table-align-center {
+      text-align: center;
+    }
+
+    th.tyro-table-align-right {
+      text-align: right;
+    }
+  }
+
+  &-sorter {
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+
+    .semi-icon {
+      font-size: 10px;
+      margin: -1px 0;
+    }
+
+    .arrow-active {
+      color: @tyro-color-primary;
+    }
+
+    &-wrapper {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  &-body {
+    background-color: @color-table_body-bg-default;
+    overflow: auto;
+
+    tr:hover {
+      background-color: @color-table_body-bg-hover;
+
+      .tyro-table-cell-fixed-left,
+      .tyro-table-cell-fixed-right {
+        background-color: @color-table_body-bg-hover;
+      }
+    }
+
+    td {
+      padding: @spacing-table-paddingY @spacing-table-paddingX;
+      border-bottom: @width-table_base_border solid @color-table-border-default;
+    }
+
+    td.tyro-table-align-center {
+      text-align: center;
+    }
+
+    td.tyro-table-align-right {
+      text-align: right;
+    }
+  }
+
+  &-cell-fixed {
+    &-left {
+      background-color: @color-table-bg-default;
+      border-right: 1px solid @color-table-border-default;
+    }
+
+    &-right {
+      background-color: @color-table-bg-default;
+      border-left: 1px solid @color-table-border-default;
+    }
+  }
+
+  &-pagination {
+    margin-top: 10px;
+  }
+}

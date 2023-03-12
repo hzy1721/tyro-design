@@ -1,0 +1,187 @@
+@import './palette.less';
+
+@tyro-color-white: rgb(@tyro-white, 1); // 浅色模式下深色背景内容Inverse
+@tyro-color-black: rgb(@tyro-black, 1); // 深色模式下浅色背景内容Inverse
+@tyro-color-primary: rgb(
+  @tyro-blue-5,
+  1
+); // 主要颜色。仅在需要非常强调的情况下使用。
+@tyro-color-primary-hover: rgb(@tyro-blue-6, 1); // 主要颜色悬浮态
+@tyro-color-primary-active: rgb(@tyro-blue-7, 1); // 主要颜色激活态
+@tyro-color-primary-disabled: rgb(@tyro-blue-2, 1); // 主要颜色禁用态
+@tyro-color-primary-light-default: rgb(
+  @tyro-blue-0,
+  1
+); // 浅版主要颜色（多用于背景）。仅在需要非常强调的情况下使用。
+@tyro-color-primary-light-hover: rgb(@tyro-blue-1, 1); // 浅版主要颜色悬浮态
+
+@tyro-color-primary-light-active: rgb(@tyro-blue-2, 1); // 浅版主要颜色激活态
+
+@tyro-color-secondary: rgb(
+  @tyro-light-blue-5,
+  1
+); // 次要颜色。强调作用次于主要颜色，但仍然具有强调作用。
+
+@tyro-color-secondary-hover: rgb(@tyro-light-blue-6, 1); // 次要颜色悬浮态
+
+@tyro-color-secondary-active: rgb(@tyro-light-blue-7, 1); // 次要颜色激活态
+
+@tyro-color-secondary-disabled: rgb(@tyro-light-blue-2, 1); // 次要颜色禁用态
+
+@tyro-color-secondary-light-default: rgb(
+  @tyro-light-blue-0,
+  1
+); // 浅版次要颜色（多用于背景）。强调作用次于主要颜色，但仍然具有强调作用。
+
+@tyro-color-secondary-light-hover: rgb(
+  @tyro-light-blue-1,
+  1
+); // 浅版次要颜色悬浮态
+
+@tyro-color-secondary-light-active: rgb(
+  @tyro-light-blue-2,
+  1
+); // 浅版次要颜色激活态
+
+@tyro-color-tertiary: rgb(@tyro-grey-5, 1); // 第三颜色，可以在页面上多次使用
+
+@tyro-color-tertiary-hover: rgb(@tyro-grey-6, 1); // 第三颜色悬浮态
+@tyro-color-tertiary-active: rgb(@tyro-grey-7, 1); // 第三颜色激活态
+@tyro-color-tertiary-light-default: rgb(
+  @tyro-grey-0,
+  1
+); // 浅版第三颜色（多用于背景），可以在页面上多次使用
+
+@tyro-color-tertiary-light-hover: rgb(@tyro-grey-1, 1); // 浅版第三颜色悬浮态
+
+@tyro-color-tertiary-light-active: rgb(@tyro-grey-2, 1); // 浅版第三颜色激活态
+
+@tyro-color-default: rgb(@tyro-grey-0, 1); // 不建议使用
+@tyro-color-default-hover: rgb(@tyro-grey-1, 1); // 不建议使用
+@tyro-color-default-active: rgb(@tyro-grey-2, 1); // 不建议使用
+@tyro-color-info: rgb(@tyro-blue-5, 1); // 信息色, 通常用于表达客观、中立信息
+
+@tyro-color-info-hover: rgb(@tyro-blue-6, 1); // 信息色悬浮态
+@tyro-color-info-active: rgb(@tyro-blue-7, 1); // 信息色激活态
+@tyro-color-info-disabled: rgb(@tyro-blue-2, 1); // 信息色禁用态
+@tyro-color-info-light-default: rgb(
+  @tyro-blue-0,
+  1
+); // 浅版信息色（多用于背景），通常用于表达客观、中立信息
+
+@tyro-color-info-light-hover: rgb(@tyro-blue-1, 1); // 浅版信息色悬浮态
+@tyro-color-info-light-active: rgb(@tyro-blue-2, 1); // 浅版信息色激活态
+@tyro-color-success: rgb(
+  @tyro-green-5,
+  1
+); // 成功色，表示安全、成功、开启的状态
+
+@tyro-color-success-hover: rgb(@tyro-green-6, 1); // 成功色悬浮态
+@tyro-color-success-active: rgb(@tyro-green-7, 1); // 成功色激活态
+@tyro-color-success-disabled: rgb(@tyro-green-2, 1); // 成功色禁用态
+@tyro-color-success-light-default: rgb(
+  @tyro-green-0,
+  1
+); // 浅版成功色（多用于背景），表示安全、成功、开启的状态
+
+@tyro-color-success-light-hover: rgb(@tyro-green-1, 1); // 浅版成功色悬浮态
+
+@tyro-color-success-light-active: rgb(@tyro-green-2, 1); // 浅版成功色激活态
+
+@tyro-color-danger: rgb(
+  @tyro-red-5,
+  1
+); // 危险色，表示危险的操作、或需要特别注意的危险信息
+
+@tyro-color-danger-hover: rgb(@tyro-red-6, 1); // 危险色悬浮态
+@tyro-color-danger-active: rgb(@tyro-red-7, 1); // 危险色激活态
+@tyro-color-danger-light-default: rgb(
+  @tyro-red-0,
+  1
+); // 浅版危险色（多用于背景），表示危险的操作、或需要特别注意的危险信息
+
+@tyro-color-danger-light-hover: rgb(@tyro-red-1, 1); // 浅版危险色悬浮态
+@tyro-color-danger-light-active: rgb(@tyro-red-2, 1); // 浅版危险色激活态
+
+@tyro-color-warning: rgb(@tyro-orange-5, 1); // 警示色，表示警告、不安全的状态
+
+@tyro-color-warning-hover: rgb(@tyro-orange-6, 1); // 警示色悬浮态
+@tyro-color-warning-active: rgb(@tyro-orange-7, 1); // 警示色激活态
+@tyro-color-warning-light-default: rgb(
+  @tyro-orange-0,
+  1
+); // 浅版警示色（多用于背景），表示警告、不安全的状态
+
+@tyro-color-warning-light-hover: rgb(@tyro-orange-1, 1); // 浅版警示色悬浮态
+
+@tyro-color-warning-light-active: rgb(@tyro-orange-2, 1); // 浅版警示色激活态
+
+@tyro-color-focus-border: rgb(@tyro-blue-5, 1); // 多用于边框激活态颜色
+@tyro-color-disabled-text: rgb(@tyro-grey-9, 0.35); // 禁用态 - 文字
+@tyro-color-disabled-border: rgb(@tyro-grey-1, 1); // 禁用态 - 描边
+@tyro-color-disabled-bg: rgb(@tyro-grey-1, 1); // 禁用态 - 背景
+@tyro-color-disabled-fill: rgb(@tyro-grey-8, 0.04); // 禁用态 - 填充
+@tyro-color-shadow: rgb(@tyro-black, 0.04); // 用于模拟描边的阴影颜色
+@tyro-color-link: rgb(@tyro-blue-5, 1); // 链接颜色
+@tyro-color-link-hover: rgb(@tyro-blue-6, 1); // 链接颜色 - 悬浮态
+@tyro-color-link-active: rgb(@tyro-blue-7, 1); // 链接颜色 - 激活态
+@tyro-color-link-visited: rgb(@tyro-blue-5, 1); // 链接颜色 - 已访问
+@tyro-color-border: rgb(@tyro-grey-9, 0.08); // 默认描边颜色
+@tyro-color-nav-bg: rgb(@tyro-white, 1); // 导航背景色
+@tyro-color-overlay-bg: rgb(22 22 26 / 60%); // 蒙层背景色
+@tyro-color-fill-0: rgb(@tyro-grey-8, 0.05); // 填充色 - 默认态
+@tyro-color-fill-1: rgb(@tyro-grey-8, 0.09); // 填充色 - 悬浮态
+@tyro-color-fill-2: rgb(@tyro-grey-8, 0.13); // 填充色 - 激活态
+@tyro-color-bg-0: rgb(@tyro-white, 1); // 背景色 - 最下层（底部页面）
+@tyro-color-bg-1: rgb(
+  @tyro-white,
+  1
+); // 背景色 - 次下层（页面中需要提升的内容）
+
+@tyro-color-bg-2: rgb(@tyro-white, 1); // 背景色 - 中间层（模态等容器）
+@tyro-color-bg-3: rgb(@tyro-white, 1); // 背景色 - 次上层（通知，Toast等）
+
+@tyro-color-bg-4: rgb(@tyro-white, 1); // 背景色 - 最上层（特殊）
+@tyro-color-text-0: rgb(@tyro-grey-9, 1); // 文本/图标颜色 - 最主要
+@tyro-color-text-1: rgb(@tyro-grey-9, 0.8); // 文本/图标颜色 - 稍次要
+@tyro-color-text-2: rgb(@tyro-grey-9, 0.62); // 文本/图标颜色 - 次要
+@tyro-color-text-3: rgb(@tyro-grey-9, 0.35); // 文本/图标颜色 - 最次要
+@tyro-shadow-elevated: 0 0 1px rgb(0 0 0 / 30%), 0 4px 14px rgb(0 0 0 / 10%); // 用于toast, modal, popover等需要提升层级的界面元素
+@tyro-border-radius-extra-small: 3px; // 超小圆角，用于 checkbox 内圆角
+@tyro-border-radius-small: 3px; // 小圆角, 用于 button、tag、tabs 等大多数组件, 比较常用
+@tyro-border-radius-medium: 6px; // 中圆角, 用于 dropdown、scrollist、transfer 等菜单类组件
+@tyro-border-radius-large: 12px; // 大圆角, 用于 modal
+@tyro-border-radius-circle: 50%; // 全圆角, 用于 avatar, badge 等组件
+@tyro-border-radius-full: 9999px; // 用于创建全尺寸圆角，如胶囊标签等
+@tyro-color-highlight-bg: rgb(@tyro-yellow-4, 1); // 高亮文本背景色
+@tyro-color-highlight: rgb(@tyro-black, 1); // 高亮文本色
+
+// spacing
+@spacing-none: 0; // 间距 - 零
+@spacing-super-tight: 2px; // 间距 - 极紧凑尺寸内/外边距
+@spacing-extra-tight: 4px; // 间距 - 超紧凑尺寸内/外边距
+@spacing-tight: 8px; // 间距 - 紧凑尺寸内/外边距
+@spacing-base-tight: 12px; // 间距 - 默认（偏紧凑）尺寸内/外边距
+@spacing-base: 16px; // 间距 - 默认尺寸内/外边距
+@spacing-base-loose: 20px; // 间距 - 默认（偏宽松）尺寸内/外边距
+@spacing-loose: 24px; // 间距 - 宽松尺寸内/外边距
+@spacing-extra-loose: 32px; // 间距 - 超宽松尺寸内/外边距
+@spacing-super-loose: 40px; // 间距 - 极宽松尺寸内/外边距
+
+// font
+@font-family-regular: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue',
+  Helvetica, Arial, sans-serif; // semi 预置字体回退
+@font-size-small: 12px; // 小文本字号
+@font-size-regular: 14px; // 常规文本字号
+
+@font-size-header-6: 16px; // 六级标题字号
+@font-size-header-5: 18px; // 五级标题字号
+@font-size-header-4: 20px; // 四级标题字号
+@font-size-header-3: 24px; // 三级标题字号
+@font-size-header-2: 28px; // 二级标题字号
+@font-size-header-1: 32px; // 一级标题字号
+
+@font-weight-light: 200; // 字重 - 轻
+@font-weight-regular: 400; // 字重 - 常规
+@font-weight-bold: 600; // 字重 - 加粗

@@ -1,0 +1,15 @@
+@import './variable.less';
+
+.tyro-tooltip {
+  &-content {
+    background-color: @color-tooltip-bg-default;
+    color: @color-tooltip-text-default;
+    font-size: @font-tooltip-fontSize;
+    border-radius: @radius-tooltip;
+    padding: @spacing-tooltip_content-paddingTop
+      @spacing-tooltip_content-paddingRight
+      @spacing-tooltip_content-paddingBottom
+      @spacing-tooltip_content-paddingLeft;
+    max-width: @width-tooltip;
+  }
+}

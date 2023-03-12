@@ -1,0 +1,80 @@
+@import './variables.scss';
+
+.tyro-button {
+  color: $color-button_primary-text-default;
+  background-color: $color-button_primary-bg-default;
+  border-color: $color-button_primary-border-default;
+  border-width: $border-thickness;
+  border-style: solid;
+  padding-top: $spacing-button_default-paddingTop;
+  padding-right: $spacing-button_default-paddingRight;
+  padding-bottom: $spacing-button_default-paddingBottom;
+  padding-left: $spacing-button_default-paddingLeft;
+  border-radius: $radius-button;
+  height: $height-button_default;
+  font-weight: $font-button-fontWeight;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-button_primary-text-hover;
+    background-color: $color-button_primary-bg-hover;
+    border-color: $color-button_primary-border-hover;
+  }
+
+  &:active {
+    color: $color-button_primary-text-active;
+    background-color: $color-button_primary-bg-active;
+    border-color: $color-button_primary-border-active;
+  }
+
+  &-warning {
+    color: $color-button_warning-text-default;
+    background-color: $color-button_warning-bg-default;
+    border-color: $color-button_warning-border-default;
+
+    &:hover {
+      color: $color-button_warning-text-hover;
+      background-color: $color-button_warning-bg-hover;
+      border-color: $color-button_warning-border-hover;
+    }
+
+    &:active {
+      color: $color-button_warning-text-active;
+      background-color: $color-button_warning-bg-active;
+      border-color: $color-button_warning-border-active;
+    }
+  }
+
+  &-danger {
+    color: $color-button_danger-text-default;
+    background-color: $color-button_danger-bg-default;
+    border-color: $color-button_danger-border-default;
+
+    &:hover {
+      color: $color-button_danger-text-hover;
+      background-color: $color-button_danger-bg-hover;
+      border-color: $color-button_danger-border-hover;
+    }
+
+    &:active {
+      color: $color-button_danger-text-active;
+      background-color: $color-button_danger-bg-active;
+      border-color: $color-button_danger-border-active;
+    }
+  }
+
+  &-small {
+    padding-top: $spacing-button_small-paddingTop;
+    padding-right: $spacing-button_small-paddingRight;
+    padding-bottom: $spacing-button_small-paddingBottom;
+    padding-left: $spacing-button_small-paddingLeft;
+    height: $height-button_small;
+  }
+
+  &-large {
+    padding-top: $spacing-button_large-paddingTop;
+    padding-right: $spacing-button_large-paddingRight;
+    padding-bottom: $spacing-button_large-paddingBottom;
+    padding-left: $spacing-button_large-paddingLeft;
+  }
+}

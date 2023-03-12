@@ -1,0 +1,80 @@
+@import './variable.less';
+
+.tyro-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  &-inner {
+    position: relative;
+  }
+
+  &-input {
+    position: absolute;
+    display: none;
+  }
+
+  &-display {
+    box-sizing: border-box;
+    width: @width-checkbox_inner;
+    height: @height-checkbox_inner;
+    color: @color-checkbox_label-text-default;
+    background-color: @color-checkbox_default-bg-default;
+    border: 1px solid @color-checkbox_default-border-default;
+    border-radius: @radius-checkbox_inner;
+  }
+
+  &-label {
+    padding-left: @spacing-checkbox_label-paddingLeft;
+  }
+
+  &:hover {
+    .tyro-checkbox-display {
+      background-color: @color-checkbox_default-bg-hover;
+      border: 1px solid @color-checkbox_default-border-hover;
+    }
+  }
+
+  &.tyro-checkbox-checked {
+    .tyro-checkbox-display {
+      background-color: @color-checkbox_checked-bg-default;
+      color: @color-checkbox_checked-icon-default;
+      border: 1px solid @color-checkbox_checked-border-default;
+    }
+
+    &:hover {
+      .tyro-checkbox-display {
+        background-color: @color-checkbox_checked-bg-hover;
+        color: @color-checkbox_checked-icon-hover;
+        border: 1px solid @color-checkbox_checked-border-hover;
+      }
+    }
+
+    &:active {
+      .tyro-checkbox-display {
+        background-color: @color-checkbox_checked-bg-active;
+        color: @color-checkbox_checked-icon-active;
+        border: 1px solid @color-checkbox_checked-border-active;
+      }
+    }
+
+    &.tyro-checkbox-disabled {
+      .tyro-checkbox-display {
+        background-color: @color-checkbox_checked-bg-disabled;
+        color: @color-checkbox_checked-icon-disabled;
+        border: 1px solid @color-checkbox_disabled-border-default;
+      }
+    }
+  }
+
+  &.tyro-checkbox-disabled {
+    color: @color-checkbox_label-text-disabled;
+    cursor: not-allowed;
+
+    .tyro-checkbox-display {
+      background-color: @color-checkbox_disabled-bg-default;
+      border: 1px solid @color-checkbox_disabled-border-default;
+    }
+  }
+}

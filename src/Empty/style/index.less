@@ -1,0 +1,44 @@
+@import './variable.less';
+
+.tyro-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.tyro-empty-horizontal {
+    flex-direction: row;
+    align-items: start;
+
+    .tyro-empty-content {
+      align-items: start;
+      margin-top: 0;
+      margin-left: @spacing-empty_content_horizontal-marginLeft;
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: @spacing-empty_content_vertical-marginTop;
+  }
+
+  &-image {
+    display: flex;
+    justify-content: center;
+  }
+
+  &-title {
+    font-size: 16px;
+    font-weight: @font-empty_title-fontWeight;
+  }
+
+  &-description {
+    color: @color-empty_description-text-default;
+    margin-top: @spacing-empty_description-marginTop;
+  }
+
+  &-footer {
+    margin-top: @spacing-empty_footer-marginTop;
+  }
+}
