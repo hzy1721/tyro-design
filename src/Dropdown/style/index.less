@@ -1,0 +1,26 @@
+@import '../../Popover/style/variable.less';
+@import './variable.less';
+
+.tyro-dropdown {
+  &-card {
+    display: inline-block;
+    background-color: @color-popover-bg-default;
+    border: 1px solid @color-popover-border-default;
+    border-radius: @radius-popover;
+    padding: @spacing-dropdown_menu-paddingY @spacing-dropdown_menu-paddingX;
+  }
+
+  &-item {
+    color: @color-dropdown_item-text-default;
+    padding: @spacing-dropdown_item-paddingY @spacing-dropdown_item-paddingX;
+    cursor: pointer;
+
+    &:hover {
+      background-color: @color-dropdown_item-bg-hover;
+    }
+
+    &:active {
+      background-color: @color-dropdown_item-bg-active;
+    }
+  }
+}

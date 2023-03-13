@@ -18,11 +18,28 @@ const Portal: FC<PortalProps> = (props) => {
     trigger = 'hover',
     position = 'bottom',
     content,
-    spacing = 5,
+    spacing = 3,
   } = props;
   const [showContent, setShowContent] = useState(false);
+  const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const childrenRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);
+
+  const handleMouseEnter = () => {
+    if (leaveTimeoutRef.current !== null) {
+      clearTimeout(leaveTimeoutRef.current);
+    }
+    setShowContent(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (leaveTimeoutRef.current !== null) {
+      clearTimeout(leaveTimeoutRef.current);
+    }
+    leaveTimeoutRef.current = setTimeout(() => {
+      setShowContent(false);
+    }, 100);
+  };
 
   const childrenProps = useMemo<any>(() => {
     let props: any = {
@@ -31,8 +48,8 @@ const Portal: FC<PortalProps> = (props) => {
     if (trigger === 'hover') {
       props = {
         ...props,
-        onMouseEnter: () => setShowContent(true),
-        onMouseLeave: () => setShowContent(false),
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
       };
     } else if (trigger === 'click') {
       props = {
@@ -51,7 +68,7 @@ const Portal: FC<PortalProps> = (props) => {
       return children;
     }
     return cloneElement(children as ReactElement, childrenProps);
-  }, [children]);
+  }, [children, childrenProps]);
 
   const [contentTop, contentLeft] = useMemo(() => {
     const childrenWidth = childrenRef.current?.offsetWidth ?? 0;
@@ -109,14 +126,8 @@ const Portal: FC<PortalProps> = (props) => {
     return [top, left];
   }, [childrenRef.current, contentRef.current, position]);
 
-  const newContent = useMemo(() => {
-    if (!content) {
-      return undefined;
-    }
-    if (typeof content === 'string') {
-      return content;
-    }
-    return cloneElement(content as ReactElement, {
+  const contentProps = useMemo<any>(() => {
+    let props: any = {
       ref: contentRef,
       style: {
         position: 'absolute',
@@ -125,8 +136,26 @@ const Portal: FC<PortalProps> = (props) => {
         zIndex: 1030,
         visibility: !showContent ? 'hidden' : undefined,
       },
-    });
-  }, [content, children, showContent]);
+    };
+    if (trigger === 'hover') {
+      props = {
+        ...props,
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+      };
+    }
+    return props;
+  }, [contentTop, contentLeft, showContent]);
+
+  const newContent = useMemo(() => {
+    if (!content) {
+      return undefined;
+    }
+    if (typeof content === 'string') {
+      return content;
+    }
+    return cloneElement(content as ReactElement, contentProps);
+  }, [content, contentProps]);
 
   return (
     <>
