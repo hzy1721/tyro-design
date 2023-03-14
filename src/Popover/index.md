@@ -1,8 +1,3 @@
----
-group:
-  title: 数据展示
----
-
 # Popover
 
 气泡卡片组件。
@@ -17,16 +12,14 @@ group:
 import { Space, Popover, Button } from 'tyro-design';
 
 export default () => (
-  <>
-    <Space>
-      <Popover content={<div>弹出层内容</div>}>
-        <Button>hover to show</Button>
-      </Popover>
-      <Popover trigger="click" content={<div>弹出层内容</div>}>
-        <Button>click to show</Button>
-      </Popover>
-    </Space>
-  </>
+  <Space>
+    <Popover content={<div>弹出层内容</div>}>
+      <Button>hover to show</Button>
+    </Popover>
+    <Popover trigger="click" content={<div>弹出层内容</div>}>
+      <Button>click to show</Button>
+    </Popover>
+  </Space>
 );
 ```
 
@@ -59,7 +52,7 @@ export default () => (
       ))}
     </Space>
     <div style={{ marginTop: 10 }}>
-      <Space direction="vertical">
+      <Space vertical>
         {['leftTop', 'left', 'leftBottom'].map((pos) => (
           <Popover position={pos} content={placeholder} key={pos}>
             <Button style={{ width: 110 }} key={pos}>
@@ -68,7 +61,7 @@ export default () => (
           </Popover>
         ))}
       </Space>
-      <Space direction="vertical" style={{ marginLeft: 382 }}>
+      <Space vertical style={{ marginLeft: 366 }}>
         {['rightTop', 'right', 'rightBottom'].map((pos) => (
           <Popover position={pos} content={placeholder} key={pos}>
             <Button style={{ width: 110 }} key={pos}>

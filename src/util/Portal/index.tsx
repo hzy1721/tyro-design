@@ -38,7 +38,7 @@ const Portal: FC<PortalProps> = (props) => {
     }
     leaveTimeoutRef.current = setTimeout(() => {
       setShowContent(false);
-    }, 100);
+    }, 50);
   };
 
   const childrenProps = useMemo<any>(() => {
