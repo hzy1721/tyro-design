@@ -7,10 +7,10 @@
 通过`defaultChecked`、`checked`控制是否勾选，勾选状态改变时触发`onChange`函数。
 
 ```jsx
-import { Checkbox } from 'tyro-design';
+import { Space, Checkbox } from 'tyro-design';
 
 export default () => (
-  <>
+  <Space vertical align="start">
     <Checkbox
       defaultChecked={true}
       onChange={(checked) => alert(`uncontrolled: ${checked}`)}
@@ -20,11 +20,10 @@ export default () => (
     <Checkbox
       checked={true}
       onChange={(checked) => alert(`controlled: ${checked}`)}
-      style={{ marginTop: 10 }}
     >
       受控
     </Checkbox>
-  </>
+  </Space>
 );
 ```
 
@@ -33,15 +32,15 @@ export default () => (
 通过`disabled`禁用 Checkbox。
 
 ```jsx
-import { Checkbox } from 'tyro-design';
+import { Space, Checkbox } from 'tyro-design';
 
 export default () => (
-  <>
+  <Space vertical align="start">
     <Checkbox disabled>未选中禁用</Checkbox>
-    <Checkbox checked style={{ marginTop: 10 }} disabled>
+    <Checkbox checked disabled>
       选中禁用
     </Checkbox>
-  </>
+  </Space>
 );
 ```
 
