@@ -1,0 +1,86 @@
+@import './variable.less';
+
+.tyro-button {
+  color: @color-button_primary-text-default;
+  background-color: @color-button_primary-bg-default;
+  border: @border-thickness solid @color-button_primary-border-default;
+  border-radius: @radius-button;
+  padding: @spacing-button_default-paddingY @spacing-button_default-paddingX;
+  height: @height-button_default;
+  font-weight: @font-button-fontWeight;
+  cursor: pointer;
+
+  &:hover {
+    background-color: @color-button_primary-bg-hover;
+    border-color: @color-button_primary-border-hover;
+  }
+
+  &:active {
+    background-color: @color-button_primary-bg-active;
+    border-color: @color-button_primary-border-active;
+  }
+
+  &-secondary {
+    color: @color-button_secondary-text-default;
+    background-color: @color-button_secondary-bg-default;
+    border-color: @color-button_secondary-border-default;
+
+    &:hover {
+      background-color: @color-button_secondary-bg-hover;
+      border-color: @color-button_secondary-border-hover;
+    }
+
+    &:active {
+      background-color: @color-button_secondary-bg-active;
+      border-color: @color-button_secondary-border-active;
+    }
+  }
+
+  &-tertiary {
+    color: @color-button_tertiary-text-default;
+    background-color: @color-button_tertiary-bg-default;
+    border-color: @color-button_tertiary-border-default;
+
+    &:hover {
+      background-color: @color-button_tertiary-bg-hover;
+      border-color: @color-button_tertiary-border-hover;
+    }
+
+    &:active {
+      background-color: @color-button_tertiary-bg-active;
+      border-color: @color-button_tertiary-border-active;
+    }
+  }
+
+  &-warning {
+    color: @color-button_warning-text-default;
+    background-color: @color-button_warning-bg-default;
+    border-color: @color-button_warning-border-default;
+
+    &:hover {
+      background-color: @color-button_warning-bg-hover;
+      border-color: @color-button_warning-border-hover;
+    }
+
+    &:active {
+      background-color: @color-button_warning-bg-active;
+      border-color: @color-button_warning-border-active;
+    }
+  }
+
+  &-danger {
+    color: @color-button_danger-text-default;
+    background-color: @color-button_danger-bg-default;
+    border-color: @color-button_danger-border-default;
+
+    &:hover {
+      background-color: @color-button_danger-bg-hover;
+      border-color: @color-button_danger-border-hover;
+    }
+
+    &:active {
+      background-color: @color-button_danger-bg-active;
+      border-color: @color-button_danger-border-active;
+    }
+  }
+}
