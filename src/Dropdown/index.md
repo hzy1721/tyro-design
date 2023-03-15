@@ -33,7 +33,9 @@ export default () => (
 
 ### DropdownMenuItem
 
-| 属性      | 说明             | 类型                | 默认值 |
-| :-------- | :--------------- | :------------------ | :----- |
-| `name`    | 名称             | `string`            |        |
-| `onClick` | 点击事件回调函数 | `MouseEventHandler` |        |
+| 属性        | 说明             | 类型                | 默认值 |
+| :---------- | :--------------- | :------------------ | :----- |
+| `name`      | 名称             | `string`            |        |
+| `onClick`   | 点击事件回调函数 | `MouseEventHandler` |        |
+| `className` | 自定义类名       | `string`            |        |
+| `style`     | 自定义样式       | `CSSPropertie`      |        |
