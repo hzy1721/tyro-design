@@ -1,0 +1,39 @@
+@import './variable.less';
+
+.tyro-select {
+  display: inline-flex;
+  align-items: center;
+  background-color: @color-select-bg-default;
+  height: @height-select_default;
+  border-radius: @radius-select;
+  border: 1px solid transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: @color-select-bg-hover;
+  }
+
+  &:active {
+    background-color: @color-select-bg-active;
+    border: 1px solid @color-select-border-active;
+  }
+
+  &-selection {
+    color: @color-select_main-text-default;
+    margin-left: @spacing-base-tight;
+    user-select: none;
+    font-size: 14px;
+  }
+
+  &-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: @color-select-icon-default;
+    width: @width-select_arrow;
+  }
+
+  &-open {
+    border: 1px solid @color-select-border-active;
+  }
+}
