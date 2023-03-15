@@ -2,6 +2,7 @@ import React, {
   cloneElement,
   FC,
   ReactElement,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -21,8 +22,10 @@ const Portal: FC<PortalProps> = (props) => {
     position = 'bottom',
     content,
     spacing = 3,
+    visible: externalVisible,
+    onVisibleChange,
   } = props;
-  const [showContent, setShowContent] = useState(false);
+  const [internalVisible, setInternalVisible] = useState(false);
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const childrenRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);
@@ -35,17 +38,30 @@ const Portal: FC<PortalProps> = (props) => {
     spacing,
   );
 
+  useEffect(() => {
+    if (externalVisible !== undefined) {
+      setInternalVisible(externalVisible);
+    }
+  }, [externalVisible]);
+
   useLayoutEffect(() => {
-    if (showContent) {
+    if (internalVisible) {
       updateContentRect();
     }
-  }, [showContent]);
+  }, [internalVisible]);
+
+  const handleVisibleChange = (visible: boolean) => {
+    if (externalVisible === undefined) {
+      setInternalVisible(visible);
+    }
+    onVisibleChange && onVisibleChange(visible);
+  };
 
   const handleMouseEnter = () => {
     if (leaveTimeoutRef.current !== null) {
       clearTimeout(leaveTimeoutRef.current);
     }
-    setShowContent(true);
+    handleVisibleChange(true);
   };
 
   const handleMouseLeave = () => {
@@ -53,9 +69,32 @@ const Portal: FC<PortalProps> = (props) => {
       clearTimeout(leaveTimeoutRef.current);
     }
     leaveTimeoutRef.current = setTimeout(() => {
-      setShowContent(false);
+      handleVisibleChange(false);
     }, 50);
   };
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (!e.target) {
+      return;
+    }
+    const target = e.target as Node;
+    if (childrenRef.current?.contains(target)) {
+      return;
+    }
+    if (contentRef.current?.contains(target)) {
+      return;
+    }
+    handleVisibleChange(false);
+  };
+
+  useEffect(() => {
+    if (trigger === 'click') {
+      document.addEventListener('click', handleClickOutside);
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }
+  }, [trigger]);
 
   const childrenProps = useMemo<any>(() => {
     let props: any = {
@@ -70,11 +109,11 @@ const Portal: FC<PortalProps> = (props) => {
     } else if (trigger === 'click') {
       props = {
         ...props,
-        onClick: () => setShowContent((prev) => !prev),
+        onClick: () => handleVisibleChange(!internalVisible),
       };
     }
     return props;
-  }, [trigger]);
+  }, [trigger, internalVisible]);
 
   const newChildren = useMemo(() => {
     if (!children) {
@@ -120,7 +159,7 @@ const Portal: FC<PortalProps> = (props) => {
   return (
     <>
       {newChildren}
-      {showContent && createPortal(newContent, document.body)}
+      {internalVisible && createPortal(newContent, document.body)}
     </>
   );
 };

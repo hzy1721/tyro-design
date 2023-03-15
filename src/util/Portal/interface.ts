@@ -20,4 +20,6 @@ export interface PortalProps extends BaseProps {
   position?: PortalPosition;
   content?: ReactElement;
   spacing?: number;
+  visible?: boolean;
+  onVisibleChange?: (visible: boolean) => void;
 }
