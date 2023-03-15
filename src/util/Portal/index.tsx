@@ -2,12 +2,14 @@ import React, {
   cloneElement,
   FC,
   ReactElement,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { getElementLeft, getElementTop } from '../position';
+import { useContentPosition } from './hooks/useContentPosition';
+import { useElementRect } from './hooks/useElementRect';
 import { PortalProps } from './interface';
 
 import './style/index.less';
@@ -24,6 +26,20 @@ const Portal: FC<PortalProps> = (props) => {
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const childrenRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);
+  const [childrenRect] = useElementRect(childrenRef);
+  const [contentRect, updateContentRect] = useElementRect(contentRef);
+  const contentPosition = useContentPosition(
+    childrenRect,
+    contentRect,
+    position,
+    spacing,
+  );
+
+  useLayoutEffect(() => {
+    if (showContent) {
+      updateContentRect();
+    }
+  }, [showContent]);
 
   const handleMouseEnter = () => {
     if (leaveTimeoutRef.current !== null) {
@@ -70,63 +86,8 @@ const Portal: FC<PortalProps> = (props) => {
     return cloneElement(children as ReactElement, childrenProps);
   }, [children, childrenProps]);
 
-  const [contentTop, contentLeft] = useMemo(() => {
-    const childrenWidth = childrenRef.current?.offsetWidth ?? 0;
-    const childrenHeight = childrenRef.current?.offsetHeight ?? 0;
-    const contentWidth = contentRef.current?.offsetWidth ?? 0;
-    const contentHeight = contentRef.current?.offsetHeight ?? 0;
-    let top = getElementTop(childrenRef.current);
-    let left = getElementLeft(childrenRef.current);
-    switch (position) {
-      case 'topLeft':
-        top -= contentHeight + spacing;
-        break;
-      case 'top':
-        top -= contentHeight + spacing;
-        left -= (contentWidth - childrenWidth) / 2;
-        break;
-      case 'topRight':
-        top -= contentHeight + spacing;
-        left -= contentWidth - childrenWidth;
-        break;
-      case 'leftTop':
-        left -= contentWidth + spacing;
-        break;
-      case 'left':
-        top -= (contentHeight - childrenHeight) / 2;
-        left -= contentWidth + spacing;
-        break;
-      case 'leftBottom':
-        top -= contentHeight - childrenHeight;
-        left -= contentWidth + spacing;
-        break;
-      case 'rightTop':
-        left += childrenWidth + spacing;
-        break;
-      case 'right':
-        top -= (contentHeight - childrenHeight) / 2;
-        left += childrenWidth + spacing;
-        break;
-      case 'rightBottom':
-        top -= contentHeight - childrenHeight;
-        left += childrenWidth + spacing;
-        break;
-      case 'bottomLeft':
-        top += childrenHeight + spacing;
-        break;
-      case 'bottom':
-        top += childrenHeight + spacing;
-        left -= (contentWidth - childrenWidth) / 2;
-        break;
-      case 'bottomRight':
-        top += childrenHeight + spacing;
-        left -= contentWidth - childrenWidth;
-        break;
-    }
-    return [top, left];
-  }, [childrenRef.current, contentRef.current, position]);
-
   const contentProps = useMemo<any>(() => {
+    const [contentTop, contentLeft] = contentPosition;
     let props: any = {
       ref: contentRef,
       style: {
@@ -134,7 +95,6 @@ const Portal: FC<PortalProps> = (props) => {
         top: contentTop,
         left: contentLeft,
         zIndex: 1030,
-        visibility: !showContent ? 'hidden' : undefined,
       },
     };
     if (trigger === 'hover') {
@@ -145,7 +105,7 @@ const Portal: FC<PortalProps> = (props) => {
       };
     }
     return props;
-  }, [contentTop, contentLeft, showContent]);
+  }, [contentPosition, trigger]);
 
   const newContent = useMemo(() => {
     if (!content) {
@@ -160,7 +120,7 @@ const Portal: FC<PortalProps> = (props) => {
   return (
     <>
       {newChildren}
-      {createPortal(newContent, document.body)}
+      {showContent && createPortal(newContent, document.body)}
     </>
   );
 };
