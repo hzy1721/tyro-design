@@ -2,6 +2,7 @@ import { IconChevronLeft, IconChevronRight } from '@douyinfe/semi-icons';
 import classNames from 'classnames';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import Dropdown from '../Dropdown';
+import InputNumber from '../InputNumber';
 import Select from '../Select';
 import { PaginationProps } from './interface';
 
@@ -22,6 +23,7 @@ const Pagination: FC<PaginationProps> = (props) => {
     pageSizeOpts = [10, 20, 40, 100],
     onPageSizeChange,
     onChange,
+    showQuickJumper = false,
     size,
   } = props;
 
@@ -60,39 +62,33 @@ const Pagination: FC<PaginationProps> = (props) => {
     });
   };
 
+  const handlePageChange = (page: number) => {
+    if (currentPage === undefined) {
+      setInternalPage(page);
+    }
+    onPageChange && onPageChange(page);
+    onChange && onChange(page, internalPageSize);
+  };
+
   const handleClickPrev = () => {
     if (internalPage <= 1) {
       return;
     }
-    const newPage = internalPage - 1;
-    if (currentPage === undefined) {
-      setInternalPage(newPage);
-    }
-    onPageChange && onPageChange(newPage);
-    onChange && onChange(newPage, internalPageSize);
+    handlePageChange(internalPage - 1);
   };
 
   const handleClickNext = () => {
     if (internalPage >= pageNum) {
       return;
     }
-    const newPage = internalPage + 1;
-    if (currentPage === undefined) {
-      setInternalPage(newPage);
-    }
-    onPageChange && onPageChange(newPage);
-    onChange && onChange(newPage, internalPageSize);
+    handlePageChange(internalPage + 1);
   };
 
   const handleClickPage = (page: number) => {
     if (page < 1 || page > pageNum) {
       return;
     }
-    if (currentPage === undefined) {
-      setInternalPage(page);
-    }
-    onPageChange && onPageChange(page);
-    onChange && onChange(page, internalPageSize);
+    handlePageChange(page);
   };
 
   const renderPaginationDetail = () => {
@@ -187,6 +183,11 @@ const Pagination: FC<PaginationProps> = (props) => {
     onPageSizeChange && onPageSizeChange(pageSize);
   };
 
+  const handleQuickJump = (page: number) => {
+    const validPage = Math.max(1, Math.min(page, pageNum));
+    handlePageChange(validPage);
+  };
+
   return (
     <div
       className={classNames('tyro-pagination-wrapper', className)}
@@ -213,6 +214,17 @@ const Pagination: FC<PaginationProps> = (props) => {
             value={internalPageSize}
             onChange={(value) => handlePageSizeChange(value as number)}
           />
+        )}
+        {showQuickJumper && (
+          <div className="tyro-pagination-quickjumper">
+            跳至
+            <InputNumber
+              style={{ width: 22, margin: '0 5px' }}
+              onBlur={handleQuickJump}
+              onEnterPress={handleQuickJump}
+            />
+            页
+          </div>
         )}
       </div>
     </div>

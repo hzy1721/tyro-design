@@ -1,8 +1,3 @@
----
-group:
-  title: 导航
----
-
 # Pagination
 
 分页组件。
@@ -58,6 +53,19 @@ import { Pagination } from 'tyro-design';
 export default () => <Pagination total={50} showDetail showSizeChanger />;
 ```
 
+## 快速跳转
+
+传入`showQuickJumper`显示快速跳转页码的输入框。
+
+- 输入页码后按回车或使输入框失去焦点即可触发跳转
+- 如果输入的页码超出有效范围，则会进行截断
+
+```jsx
+import { Pagination } from 'tyro-design';
+
+export default () => <Pagination total={200} showQuickJumper />;
+```
+
 ## 迷你版本
 
 设置`size`为`'small'`开启迷你版本。
@@ -83,4 +91,5 @@ export default () => <Pagination total={100} size="small" />;
 | `pageSizeOpts`       | 页容量选项                  | `number[]`                                        | `[10, 20, 40, 100]` |
 | `onPageSizeChange`   | 页容量变化的回调函数        | `(pageSize: number) => void`                      |                     |
 | `onChange`           | 页码或页容量变化的回调函数  | `(currentPage: number, pageSize: number) => void` |                     |
+| `showQuickJumper`    | 是否显示快速跳转            | `boolean`                                         | `false`             |
 | `size`               | 尺寸                        | `'small'`                                         |                     |

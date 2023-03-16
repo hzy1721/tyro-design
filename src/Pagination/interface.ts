@@ -12,5 +12,6 @@ export interface PaginationProps extends BaseProps {
   pageSizeOpts?: number[];
   onPageSizeChange?: (pageSize: number) => void;
   onChange?: (currentPage: number, pageSize: number) => void;
+  showQuickJumper?: boolean;
   size?: 'small';
 }
