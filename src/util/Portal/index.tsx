@@ -127,15 +127,8 @@ const Portal: FC<PortalProps> = (props) => {
   }, [children, childrenProps]);
 
   const contentProps = useMemo<any>(() => {
-    const [contentTop, contentLeft] = contentPosition;
     let props: any = {
       ref: contentRef,
-      style: {
-        position: 'absolute',
-        top: contentTop,
-        left: contentLeft,
-        zIndex: 1030,
-      },
     };
     if (trigger === 'hover') {
       props = {
@@ -145,7 +138,7 @@ const Portal: FC<PortalProps> = (props) => {
       };
     }
     return props;
-  }, [contentPosition, trigger]);
+  }, [trigger]);
 
   const newContent = useMemo(() => {
     if (!content) {
@@ -154,8 +147,20 @@ const Portal: FC<PortalProps> = (props) => {
     if (typeof content === 'string') {
       return content;
     }
-    return cloneElement(content as ReactElement, contentProps);
-  }, [content, contentProps]);
+    const [contentTop, contentLeft] = contentPosition;
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: contentTop,
+          left: contentLeft,
+          zIndex: 1030,
+        }}
+      >
+        {cloneElement(content as ReactElement, contentProps)}
+      </div>
+    );
+  }, [content, contentPosition, contentProps]);
 
   return (
     <>

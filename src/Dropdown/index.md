@@ -24,12 +24,13 @@ export default () => (
 
 ## API
 
-| 属性       | 说明                   | 类型                                                                                                                                                             | 默认值     |
-| :--------- | :--------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------- |
-| `menu`     | 菜单项配置数组         | `DropdownMenuItem[]`                                                                                                                                             | `[]`       |
-| `children` | 需要添加弹出效果的元素 | `ReactNode`                                                                                                                                                      |            |
-| `trigger`  | 触发方式               | `'hover' \| 'click'`                                                                                                                                             | `'hover'`  |
-| `position` | 弹出方向               | `'topLeft' \| 'top' \| 'topRight' \| 'leftTop' \| 'left' \| 'leftBottom' \| 'rightTop' \| 'right' \| 'rightBottom' \| 'bottomLeft' \| 'bottom' \| 'bottomRight'` | `'bottom'` |
+| 属性       | 说明                                 | 类型                                                                                                                                                             | 默认值     |
+| :--------- | :----------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------- |
+| `menu`     | 菜单项配置数组                       | `DropdownMenuItem[]`                                                                                                                                             | `[]`       |
+| `maxCount` | 最多显示几个菜单项（多出添加滚动条） | `number`                                                                                                                                                         | `8`        |
+| `children` | 需要添加弹出效果的元素               | `ReactNode`                                                                                                                                                      |            |
+| `trigger`  | 触发方式                             | `'hover' \| 'click'`                                                                                                                                             | `'hover'`  |
+| `position` | 弹出方向                             | `'topLeft' \| 'top' \| 'topRight' \| 'leftTop' \| 'left' \| 'leftBottom' \| 'rightTop' \| 'right' \| 'rightBottom' \| 'bottomLeft' \| 'bottom' \| 'bottomRight'` | `'bottom'` |
 
 ### DropdownMenuItem
 
