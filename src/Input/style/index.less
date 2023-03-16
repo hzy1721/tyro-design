@@ -1,0 +1,25 @@
+@import './variable.less';
+
+.tyro-input {
+  color: @color-input_default-text-default;
+  background-color: @color-input_default-bg-default;
+  border: 1px solid @color-input_default-border-default;
+  outline: none;
+  height: @height-input_default;
+  border-radius: @radius-input_wrapper;
+  padding: 0 @spacing-input-paddingX;
+
+  &:hover {
+    background-color: @color-input_default-bg-hover;
+  }
+
+  &:active {
+    background-color: @color-input_default-bg-active;
+    border: 1px solid @color-input_default-border-active;
+  }
+
+  &:focus {
+    border: 1px solid @color-input_default-border-focus;
+    background-color: @color-input_default-bg-focus;
+  }
+}
