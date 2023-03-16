@@ -29,7 +29,7 @@ const Portal: FC<PortalProps> = (props) => {
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const childrenRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);
-  const [childrenRect] = useElementRect(childrenRef);
+  const [childrenRect, updateChildrenRect] = useElementRect(childrenRef);
   const [contentRect, updateContentRect] = useElementRect(contentRef);
   const contentPosition = useContentPosition(
     childrenRect,
@@ -46,6 +46,7 @@ const Portal: FC<PortalProps> = (props) => {
 
   useLayoutEffect(() => {
     if (internalVisible) {
+      updateChildrenRect();
       updateContentRect();
     }
   }, [internalVisible]);
