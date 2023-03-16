@@ -8,5 +8,9 @@ export interface PaginationProps extends BaseProps {
   onPageChange?: (currentPage: number) => void;
   showTotal?: boolean;
   showDetail?: boolean;
+  showSizeChanger?: boolean;
+  pageSizeOpts?: number[];
+  onPageSizeChange?: (pageSize: number) => void;
+  onChange?: (currentPage: number, pageSize: number) => void;
   size?: 'small';
 }
