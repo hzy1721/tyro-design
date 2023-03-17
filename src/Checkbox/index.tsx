@@ -1,4 +1,4 @@
-import { IconTick } from '@douyinfe/semi-icons';
+import { IconCheckboxTick } from '@douyinfe/semi-icons';
 import classNames from 'classnames';
 import React, { FC, useEffect, useState } from 'react';
 import { CheckboxProps } from './interface';
@@ -51,8 +51,8 @@ const Checkbox: FC<CheckboxProps> = (props) => {
         />
         <div className="tyro-checkbox-display">
           {internalChecked && (
-            <IconTick
-              style={{ fontSize: 12, position: 'absolute', top: 2, left: 2 }}
+            <IconCheckboxTick
+              style={{ position: 'absolute', top: 0, left: 0 }}
             />
           )}
         </div>
