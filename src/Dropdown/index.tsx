@@ -8,7 +8,7 @@ import './style/index.less';
 const MENU_ITEM_HEIGHT = 36;
 
 const Dropdown: FC<DropdownProps> = (props) => {
-  const { menu = [], maxCount = 8, ...rest } = props;
+  const { menu = [], maxCount = 8, showTick = false, ...rest } = props;
 
   return (
     <Portal
@@ -19,7 +19,7 @@ const Dropdown: FC<DropdownProps> = (props) => {
           style={{ maxHeight: maxCount * MENU_ITEM_HEIGHT }}
         >
           {menu.map((item, index) => (
-            <DropdownItem key={index} {...item} />
+            <DropdownItem key={index} {...item} showTick={showTick} />
           ))}
         </div>
       }

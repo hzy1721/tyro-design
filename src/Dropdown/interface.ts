@@ -4,4 +4,5 @@ import { DropdownItemProps as DropdownMenuItem } from './DropdownItem/interface'
 export interface DropdownProps extends Omit<PortalProps, 'content'> {
   menu: DropdownMenuItem[];
   maxCount?: number;
+  showTick?: boolean;
 }

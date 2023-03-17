@@ -5,4 +5,6 @@ export interface DropdownItemProps {
   onClick?: MouseEventHandler;
   className?: string;
   style?: CSSProperties;
+  active?: boolean;
+  showTick?: boolean;
 }
