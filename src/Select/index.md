@@ -26,12 +26,14 @@ export default () => (
 
 ## API
 
-| 属性           | 说明             | 类型                      | 默认值 |
-| :------------- | :--------------- | :------------------------ | :----- |
-| `optionList`   | 选项列表         | `SelectOptionListItem[]`  | `[]`   |
-| `defaultValue` | 初始值           | `string`                  |        |
-| `value`        | 受控值           | `string`                  |        |
-| `onChange`     | 值变化的回调函数 | `(value: string) => void` |        |
+| 属性            | 说明             | 类型                                                      | 默认值         |
+| :-------------- | :--------------- | :-------------------------------------------------------- | :------------- |
+| `optionList`    | 选项列表         | `SelectOptionListItem[]`                                  | `[]`           |
+| `defaultValue`  | 初始值           | `string`                                                  |                |
+| `value`         | 受控值           | `string`                                                  |                |
+| `onChange`      | 值变化的回调函数 | `(value: string) => void`                                 |                |
+| `triggerRender` | 自定义触发器渲染 | `(visible: boolean, selectedLabel?: string) => ReactNode` |                |
+| `position`      | 弹出位置         | `string`                                                  | `'bottomLeft'` |
 
 ### SelectOptionListItem
 

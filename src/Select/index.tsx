@@ -14,6 +14,8 @@ const Select: FC<SelectProps> = (props) => {
     defaultValue,
     value: externalValue,
     onChange,
+    triggerRender,
+    position = 'bottomLeft',
   } = props;
 
   const [visible, setVisible] = useState(false);
@@ -46,29 +48,35 @@ const Select: FC<SelectProps> = (props) => {
 
   return (
     <Dropdown
-      menu={optionList.map((option) => ({
-        name: option.label ?? String(option.value),
+      menu={optionList.map(({ value, label }) => ({
+        name: label ?? String(value),
         onClick: () => {
-          handleOptionClick(option.value);
           setVisible(false);
+          handleOptionClick(value);
         },
+        active: value === internalValue,
       }))}
       trigger="click"
-      position="bottomLeft"
+      position={position}
       visible={visible}
       onVisibleChange={setVisible}
+      showTick
     >
-      <div
-        className={classNames('tyro-select', className, {
-          'tyro-select-open': visible,
-        })}
-        style={style}
-      >
-        <div className="tyro-select-selection">{internalLabel}</div>
-        <div className="tyro-select-arrow">
-          <IconChevronDown />
+      {triggerRender ? (
+        triggerRender(visible, internalLabel)
+      ) : (
+        <div
+          className={classNames('tyro-select', className, {
+            'tyro-select-open': visible,
+          })}
+          style={style}
+        >
+          <div className="tyro-select-selection">{internalLabel}</div>
+          <div className="tyro-select-arrow">
+            <IconChevronDown />
+          </div>
         </div>
-      </div>
+      )}
     </Dropdown>
   );
 };
