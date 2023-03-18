@@ -24,6 +24,26 @@ export default () => (
 );
 ```
 
+## 多选
+
+传入`multiple`开启多选，相应的`defaultValue`、`value`、`onChange`参数也变为数组类型。
+
+```jsx
+import { Select } from 'tyro-design';
+
+export default () => (
+  <Select
+    optionList={[
+      { value: 'react', label: 'React' },
+      { value: 'vue', label: 'Vue' },
+      { value: 'angular', label: 'Angular' },
+    ]}
+    multiple
+    defaultValue={['react', 'vue']}
+  />
+);
+```
+
 ## API
 
 | 属性            | 说明             | 类型                                                      | 默认值         |

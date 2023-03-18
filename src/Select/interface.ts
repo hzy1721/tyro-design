@@ -4,6 +4,8 @@ import { PortalPosition } from '../util/Portal/interface';
 
 export type SelectOptionValue = string | number;
 
+export type SelectValue = string | number | string[] | number[];
+
 export interface SelectOptionListItem {
   value: SelectOptionValue;
   label?: string;
@@ -11,9 +13,10 @@ export interface SelectOptionListItem {
 
 export interface SelectProps extends BaseProps {
   optionList?: SelectOptionListItem[];
-  defaultValue?: SelectOptionValue;
-  value?: SelectOptionValue;
-  onChange?: (value: SelectOptionValue) => void;
-  triggerRender?: (visible: boolean, selectedLabel?: string) => ReactNode;
+  multiple?: boolean;
+  defaultValue?: SelectValue;
+  value?: SelectValue;
+  onChange?: (value: SelectValue) => void;
+  triggerRender?: (visible: boolean, selectedLabel?: SelectValue) => ReactNode;
   position?: PortalPosition;
 }
