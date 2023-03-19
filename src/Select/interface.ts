@@ -17,6 +17,6 @@ export interface SelectProps extends BaseProps {
   defaultValue?: SelectValue;
   value?: SelectValue;
   onChange?: (value: SelectValue) => void;
-  triggerRender?: (visible: boolean, selectedLabel?: SelectValue) => ReactNode;
+  triggerRender?: (visible: boolean, selectedValue?: SelectValue) => ReactNode;
   position?: PortalPosition;
 }
