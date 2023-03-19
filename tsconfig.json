@@ -10,7 +10,8 @@
       "@@/*": [".dumi/tmp/*"],
       "tyro-design": ["src"],
       "tyro-design/*": ["src/*", "*"]
-    }
+    },
+    "downlevelIteration": true
   },
   "include": [".dumi/**/*", ".dumirc.ts", "src/**/*"]
 }
