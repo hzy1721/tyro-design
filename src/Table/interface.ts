@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { CheckboxProps } from '../Checkbox/interface';
 import { PaginationProps } from '../Pagination/interface';
+import { SelectOptionListItem, SelectValue } from '../Select/interface';
 import { BaseProps } from '../util/baseProps';
 
 export interface RenderObject {
@@ -19,6 +20,8 @@ export interface TableColumn {
   width?: number | string;
   fixed?: boolean | 'left' | 'right';
   sorter?: boolean | ((r1: any, r2: any) => number);
+  filters?: SelectOptionListItem[];
+  onFilter?: (filteredValue: SelectValue, record: TableRecord) => boolean;
   onHeaderCell?: (
     column: TableColumn,
     columnIndex: number,
@@ -49,6 +52,14 @@ export interface TableProps extends BaseProps {
   rowKey?: string | ((record: TableRecord) => string);
   rowSelection?: TableRowSelection;
   pagination?: PaginationProps;
+  onChange?: (
+    pagination?: { currentPage: number; pageSize: number },
+    sorter?: { dataIndex: string; order: SortOrder },
+    filters?: Array<{
+      dataIndex: string;
+      filteredValue: SelectValue;
+    }>,
+  ) => void;
   onHeaderRow?: (columns: TableColumn[]) => Record<string, any>;
   onRow?: (record: any, index: number) => Record<string, any>;
 }

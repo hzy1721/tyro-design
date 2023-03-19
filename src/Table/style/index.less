@@ -55,12 +55,12 @@
       align-items: center;
       cursor: pointer;
       user-select: none;
+      vertical-align: middle;
     }
   }
 
   &-body {
     background-color: @color-table_body-bg-default;
-    overflow: auto;
 
     tr:hover {
       background-color: @color-table_body-bg-hover;
@@ -99,5 +99,15 @@
 
   &-pagination {
     margin-top: 10px;
+  }
+
+  &-filter-icon {
+    cursor: pointer;
+    vertical-align: middle;
+    margin-left: 5px;
+
+    &-active {
+      color: @semi-color-primary;
+    }
   }
 }

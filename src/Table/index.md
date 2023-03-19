@@ -1,8 +1,3 @@
----
-group:
-  title: 数据展示
----
-
 # Table
 
 表格组件。
@@ -10,6 +5,10 @@ group:
 ## 基本用法
 
 使用`columns`表示列信息、`dataSource`表示原始数据。
+
+- `TableColumn.title`支持`ReactNode`
+- `TableColumn.render`用于单元格内容的自定义渲染
+- 为每条数据提供一个`key`或通过`rowKey`指定主键属性，可以让 React 优化列表元素的更新
 
 ```jsx
 import { Table } from 'tyro-design';
@@ -76,10 +75,6 @@ const dataSource = [
 
 export default () => <Table columns={columns} dataSource={dataSource} />;
 ```
-
-### 性能优化
-
-为每条数据提供一个`key`或通过`rowKey`指定主键属性，让 React 优化列表元素的更新。
 
 ## 行选择
 
@@ -160,7 +155,17 @@ export default () => (
 
 ## 分页
 
-传入`pagination`添加分页组件，可参考`Pagination`组件的 API。
+传入`pagination`开启分页，有两种应用场景：
+
+- 拉取远程数据：比较常用的场景，每次从后端返回一页的数据，切换页码重新请求数据
+  - 手动提供`pagination.total`描述所有数据条数
+  - 直接显示`dataSource`全部数据，不进行数据切片
+  - 通过`pagination.onPageChange/onPageSizeChange`或`onChange`手动触发数据请求
+- 展示本地数据：一次性获取到所有数据，组件内部根据页码自动切换显示的数据
+  - `total`取`dataSource.length`
+  - 每页显示`pagination.pageSize`条数据 (默认 10 条)，自动切片
+
+通过`pagination.total`区分这两种模式。支持分页组件的受控和非受控用法。
 
 ```jsx
 import { Table } from 'tyro-design';
@@ -191,63 +196,69 @@ export default () => (
 
 ## 固定列
 
-使用`TableColumn.fixed`描述固定列，`'left'`固定在左侧，`'right'`固定在右侧，`true`相当于`'left'`。目前只支持固定左右各一列。
+使用`TableColumn.fixed`描述固定列。
+
+- `left`固定在左侧，`right`固定在右侧，`true`相当于`left`
+- 请确保左侧固定列在`columns`数组的开头、右侧固定列在`columns`的末尾，不支持固定中间的列
+- 所有固定列必须指定`width`为固定数值，以确保固定列的正确显示
 
 ```jsx
 import { Table } from 'tyro-design';
 
 const columns = [
   {
-    dataIndex: 'left',
-    title: '左侧固定列 (200px)',
-    width: 200,
+    dataIndex: 'left1',
+    title: '左侧固定列 (110px)',
+    width: 110,
+    fixed: true,
+  },
+  {
+    dataIndex: 'left2',
+    title: '左侧固定列 (150px)',
+    width: 150,
     fixed: true,
   },
   {
     dataIndex: 'mid1',
-    title: '中间列 1 (400px)',
-    width: 400,
+    title: '中间列 (300px)',
+    width: 300,
   },
   {
     dataIndex: 'mid2',
-    title: '中间列 2 (500px)',
-    width: 500,
+    title: '中间列 (400px)',
+    width: 400,
   },
   {
-    dataIndex: 'right',
-    title: '右侧固定列 (200px)',
-    width: 200,
+    dataIndex: 'right1',
+    title: '右侧固定列 (150px)',
+    width: 150,
+    fixed: 'right',
+  },
+  {
+    dataIndex: 'right2',
+    title: '右侧固定列 (110px)',
+    width: 110,
     fixed: 'right',
   },
 ];
 
-const dataSource = [
-  {
-    left: 'left',
-    mid1: 'mid1',
-    mid2: 'mid2',
-    right: 'right',
-  },
-  {
-    left: 'left',
-    mid1: 'mid1',
-    mid2: 'mid2',
-    right: 'right',
-  },
-  {
-    left: 'left',
-    mid1: 'mid1',
-    mid2: 'mid2',
-    right: 'right',
-  },
-];
+const dataSource = new Array(3).fill(0).map(() => {
+  const obj = {};
+  ['left1', 'left2', 'mid1', 'mid2', 'right1', 'right2'].forEach((key) => {
+    obj[key] = key;
+  });
+  return obj;
+});
 
 export default () => <Table columns={columns} dataSource={dataSource} />;
 ```
 
 ## 排序
 
-使用`TableColumn.sorter`开启列排序，`true`表示服务端排序，只添加 icon，传入比较函数表示本地排序。
+传入`TableColumn.sorter`开启排序功能。
+
+- `true`表示服务端排序，只添加 icon
+- 比较函数表示本地排序
 
 ```jsx
 import { Table } from 'tyro-design';
@@ -289,6 +300,69 @@ const dataSource = [
 ];
 
 export default () => <Table columns={columns} dataSource={dataSource} />;
+```
+
+## 筛选
+
+传入`TableColumn.filters`开启筛选功能。
+
+- `filters`的类型与 Select 组件`optionList`的类型相同
+- 远程数据：通过`onChange`触发数据的重新请求
+- 本地数据：通过`onFilter`确定满足筛选条件的记录
+
+```jsx
+import { Table } from 'tyro-design';
+
+const columns = [
+  {
+    dataIndex: 'title',
+    title: '标题',
+  },
+  {
+    dataIndex: 'author',
+    title: '作者',
+    filters: [
+      { value: '字节跳动技术团队', label: '字节跳动技术团队' },
+      { value: '支付宝体验科技', label: '支付宝体验科技' },
+    ],
+    onFilter: (filteredValue, record) => filteredValue.includes(record.author),
+  },
+];
+
+const dataSource = [
+  {
+    title: 'dynamicgo 开源：基于原始字节流的高性能+动态化 Go 数据处理',
+    author: '字节跳动技术团队',
+  },
+  {
+    title: 'AntV 你的保姆级数据可视化解决方案',
+    author: '支付宝体验科技',
+  },
+  {
+    title: '火山引擎 DataLeap：揭秘字节跳动业务背后的分布式数据治理思路',
+    author: '字节跳动技术团队',
+  },
+];
+
+export default () => <Table columns={columns} dataSource={dataSource} />;
+```
+
+## onChange
+
+分页、排序、筛选都会影响表格当前展示的数据。
+
+- 对于本地数据来说，组件内部会自动完成相应计算并展示正确的数据
+- 对于远程数据来说，需要通过`onChange`获知这些变化，并作为新的参数去请求新的数据
+
+```ts
+onChange?: (
+  pagination?: { currentPage: number; pageSize: number },
+  sorter?: { dataIndex: string; order: SortOrder },
+  filters?: Array<{
+    dataIndex: string;
+    filteredValue: SelectValue;
+  }>,
+) => void;
 ```
 
 ## 自定义行属性

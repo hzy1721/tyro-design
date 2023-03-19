@@ -1,9 +1,15 @@
-import { IconTriangleDown, IconTriangleUp } from '@douyinfe/semi-icons';
+import {
+  IconFilter,
+  IconTriangleDown,
+  IconTriangleUp,
+} from '@douyinfe/semi-icons';
 import classNames from 'classnames';
 import { cloneDeep } from 'lodash';
-import React, { CSSProperties, FC, useMemo, useState } from 'react';
+import React, { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
 import Checkbox from '../Checkbox';
 import Pagination from '../Pagination/index';
+import Select from '../Select';
+import { SelectValue } from '../Select/interface';
 import {
   SortInfo,
   SortOrder,
@@ -21,12 +27,14 @@ const Table: FC<TableProps> = (props) => {
     rowKey = 'key',
     rowSelection,
     pagination,
+    onChange,
     onHeaderRow,
     onRow,
     className,
     style,
   } = props;
 
+  // 行选择
   const getRecordKey = (record: TableRecord) =>
     typeof rowKey === 'function' ? record[rowKey(record)] : record[rowKey];
   const {
@@ -55,14 +63,76 @@ const Table: FC<TableProps> = (props) => {
     return map;
   });
 
+  // 分页
   const {
-    pageSize = 10,
     defaultCurrentPage = 1,
+    currentPage,
+    pageSize = 10,
     onPageChange,
+    onPageSizeChange,
+    onChange: onPaginationChange,
+    ...paginationRest
   } = pagination ?? {};
-  const [page, setPage] = useState(defaultCurrentPage);
-
+  const [internalPage, setInternalPage] = useState(defaultCurrentPage);
+  const [internalPageSize, setInternalPageSize] = useState(pageSize);
   const [sortInfo, setSortInfo] = useState<SortInfo>();
+  const [filteredValueMap, setFilteredValueMap] = useState(
+    new Map<string, SelectValue>(),
+  );
+  const onFilterMap = useMemo(
+    () =>
+      new Map(
+        columns
+          .filter((col) => col.onFilter)
+          .map((col) => [col.dataIndex, col.onFilter!]),
+      ),
+    [columns],
+  );
+  const filterInfo = useMemo(
+    () =>
+      Array.from(filteredValueMap).map(([dataIndex, filteredValue]) => ({
+        dataIndex,
+        filteredValue,
+      })),
+    [filteredValueMap],
+  );
+
+  useEffect(() => {
+    if (currentPage !== undefined) {
+      setInternalPage(currentPage);
+    }
+  }, [currentPage]);
+
+  const handlePageChange = (page: number) => {
+    if (currentPage === undefined) {
+      setInternalPage(page);
+    }
+    onPageChange && onPageChange(page);
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setInternalPageSize(pageSize);
+    onPageSizeChange && onPageSizeChange(pageSize);
+  };
+
+  const handlePaginationChange = (page: number, pageSize: number) => {
+    onPaginationChange && onPaginationChange(page, pageSize);
+    onChange && onChange({ currentPage: page, pageSize }, sortInfo, filterInfo);
+  };
+
+  const handleFilterChange = (dataIndex: string, value: SelectValue) => {
+    const newFilteredValueMap = new Map(filteredValueMap).set(dataIndex, value);
+    setFilteredValueMap(newFilteredValueMap);
+    onChange &&
+      onChange(
+        { currentPage: internalPage, pageSize: internalPageSize },
+        sortInfo,
+        Array.from(newFilteredValueMap).map(([dataIndex, filteredValue]) => ({
+          dataIndex,
+          filteredValue,
+        })),
+      );
+  };
 
   const genColStyle = (column: TableColumn) => {
     const style: CSSProperties = {};
@@ -83,21 +153,27 @@ const Table: FC<TableProps> = (props) => {
     });
   };
 
-  const genCellStyle = (column: TableColumn) => {
+  const genCellStyle = (column: TableColumn, index: number) => {
     const style: CSSProperties = {};
     const { fixed } = column;
     if (fixed === true || fixed === 'left') {
       style.position = 'sticky';
-      style.left = 0;
+      const leftWidth = columns
+        .slice(0, index)
+        .reduce((sum, col) => sum + parseInt(String(col.width ?? 0)), 0);
+      style.left = leftWidth;
     } else if (fixed === 'right') {
       style.position = 'sticky';
-      style.right = 0;
+      const rightWidth = columns
+        .slice(index + 1)
+        .reduce((sum, col) => sum + parseInt(String(col.width ?? 0)), 0);
+      style.right = rightWidth;
     }
     return style;
   };
 
   const renderHeadCell = (column: TableColumn, index: number) => {
-    const { dataIndex, title, sorter, onHeaderCell, colSpan } = column;
+    const { dataIndex, title, sorter, filters, onHeaderCell, colSpan } = column;
     const hasSorter = sorter === true || typeof sorter === 'function';
     const { dataIndex: sortIndex, order: sortOrder } = sortInfo ?? {};
     const order = sortIndex === dataIndex ? sortOrder : undefined;
@@ -106,22 +182,28 @@ const Table: FC<TableProps> = (props) => {
       const states = [undefined, SortOrder.Asc, SortOrder.Desc];
       const index = states.indexOf(order);
       const newOrder = states[(index + 1) % states.length];
-      if (newOrder === undefined) {
-        setSortInfo(undefined);
-      } else {
-        setSortInfo({
-          dataIndex,
-          order: newOrder,
-          compareFunc: typeof sorter === 'function' ? sorter : undefined,
-        });
-      }
+      const newSortInfo =
+        newOrder === undefined
+          ? undefined
+          : {
+              dataIndex,
+              order: newOrder,
+              compareFunc: typeof sorter === 'function' ? sorter : undefined,
+            };
+      setSortInfo(newSortInfo);
+      onChange &&
+        onChange(
+          { currentPage: internalPage, pageSize: internalPageSize },
+          newSortInfo,
+          filterInfo,
+        );
     };
 
     return colSpan === 0 ? null : (
       <th
         key={dataIndex}
         className={genCellClassName(column)}
-        style={genCellStyle(column)}
+        style={genCellStyle(column, index)}
         {...(onHeaderCell ? onHeaderCell(column, index) : {})}
         colSpan={colSpan}
       >
@@ -142,7 +224,26 @@ const Table: FC<TableProps> = (props) => {
             </div>
           </div>
         ) : (
-          title
+          <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+            {title}
+          </div>
+        )}
+        {filters && (
+          <Select
+            triggerRender={(_, selectedValue) => (
+              <IconFilter
+                className={classNames('tyro-table-filter-icon', {
+                  'tyro-table-filter-icon-active': Array.isArray(selectedValue)
+                    ? selectedValue.length > 0
+                    : selectedValue !== undefined,
+                })}
+              />
+            )}
+            optionList={filters}
+            multiple
+            onChange={(value) => handleFilterChange(dataIndex, value)}
+            position="bottom"
+          />
         )}
       </th>
     );
@@ -168,11 +269,15 @@ const Table: FC<TableProps> = (props) => {
     }
     const { rowSpan, colSpan } = renderProps;
 
-    return rowSpan === 0 || colSpan === 0 ? null : (
+    if (rowSpan === 0 || colSpan === 0) {
+      return null;
+    }
+
+    return (
       <td
         key={dataIndex}
         className={genCellClassName(column)}
-        style={genCellStyle(column)}
+        style={genCellStyle(column, columnIndex)}
         {...(onCell ? onCell(record, rowIndex, columnIndex) : {})}
         rowSpan={rowSpan}
         colSpan={colSpan}
@@ -224,6 +329,20 @@ const Table: FC<TableProps> = (props) => {
 
   const tableData = useMemo(() => {
     let data = dataSource;
+    if (onFilterMap.size) {
+      data = data.filter((record) => {
+        for (const [dataIndex, onFilter] of onFilterMap) {
+          const filteredValue = filteredValueMap.get(dataIndex);
+          const valueValid = Array.isArray(filteredValue)
+            ? filteredValue.length > 0
+            : filteredValue !== undefined;
+          if (valueValid && !onFilter(filteredValue!, record)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
     const { order, compareFunc } = sortInfo ?? {};
     if (compareFunc) {
       const cmpFn = (a: any, b: any) =>
@@ -231,10 +350,20 @@ const Table: FC<TableProps> = (props) => {
       data.sort(cmpFn);
     }
     if (pagination) {
-      data = data.slice(pageSize * (page - 1), pageSize * page);
+      data = data.slice(
+        internalPageSize * (internalPage - 1),
+        internalPageSize * internalPage,
+      );
     }
     return data;
-  }, [dataSource, pagination, page, sortInfo]);
+  }, [
+    dataSource,
+    pagination,
+    internalPage,
+    internalPageSize,
+    sortInfo,
+    filteredValueMap,
+  ]);
 
   return (
     <div className={classNames('tyro-table-wrapper', className)} style={style}>
@@ -269,12 +398,13 @@ const Table: FC<TableProps> = (props) => {
         <Pagination
           className="tyro-table-pagination"
           total={dataSource.length}
-          {...pagination}
           showDetail
-          onPageChange={(currentPage: number) => {
-            setPage(currentPage);
-            onPageChange && onPageChange(currentPage);
-          }}
+          currentPage={internalPage}
+          pageSize={internalPageSize}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          onChange={handlePaginationChange}
+          {...paginationRest}
         />
       )}
     </div>
