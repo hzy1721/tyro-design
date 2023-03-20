@@ -445,11 +445,11 @@ import { Table } from 'tyro-design';
 const columns = [
   {
     dataIndex: 'key',
-    title: 'key',
+    title: 'click this line',
   },
   {
     dataIndex: 'value',
-    title: 'value',
+    title: 'will alert something',
   },
 ];
 
@@ -459,18 +459,19 @@ const dataSource = Array.from({ length: 3 }, (_, index) => index + 1).map(
 
 const onHeaderRow = (columns) => ({
   style: {
-    backgroundColor: 'lightpink',
+    cursor: 'pointer',
   },
+  onClick: () => alert('click header'),
 });
 
-const onRow = (record, index) => {
-  const colors = ['lightcoral', 'lightgreen', 'lightblue'];
-  return {
-    style: {
-      backgroundColor: colors[index % colors.length],
-    },
-  };
-};
+const onRow = (record, index) =>
+  index % 2 === 0
+    ? {}
+    : {
+        style: {
+          backgroundColor: '#eee',
+        },
+      };
 
 export default () => (
   <Table
