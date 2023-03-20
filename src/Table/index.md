@@ -524,6 +524,64 @@ const dataSource = Array.from({ length: 3 }, (_, index) => index + 1).map(
 export default () => <Table columns={columns} dataSource={dataSource} />;
 ```
 
+## 有边框
+
+传入`bordered`为表格添加边框。
+
+```jsx
+import { Table } from 'tyro-design';
+
+const columns = [
+  {
+    dataIndex: 'key',
+    title: 'key',
+  },
+  {
+    dataIndex: 'value',
+    title: 'value',
+  },
+];
+
+const dataSource = Array.from({ length: 3 }, (_, index) => index + 1).map(
+  (num) => ({ key: num, value: num }),
+);
+
+export default () => (
+  <Table columns={columns} dataSource={dataSource} bordered />
+);
+```
+
+## 可伸缩列
+
+传入`resizable`使列可伸缩。
+
+- 可伸缩的列必须指定`width`为数值
+- 推荐与`bordered`一起使用
+
+```jsx
+import { Table } from 'tyro-design';
+
+const columns = [
+  {
+    dataIndex: 'key',
+    title: 'key',
+    width: 500,
+  },
+  {
+    dataIndex: 'value',
+    title: 'value',
+  },
+];
+
+const dataSource = Array.from({ length: 3 }, (_, index) => index + 1).map(
+  (num) => ({ key: num, value: num }),
+);
+
+export default () => (
+  <Table columns={columns} dataSource={dataSource} bordered resizable />
+);
+```
+
 ## 表头列合并
 
 使用`TableColumn.colSpan`实现表头的列合并，注意对于空间被占用的列，需要手动声明`colSpan`为`0`。

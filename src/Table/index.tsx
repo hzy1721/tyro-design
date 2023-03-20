@@ -6,6 +6,7 @@ import {
 import classNames from 'classnames';
 import { cloneDeep } from 'lodash';
 import React, { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
+import { Resizable } from 'react-resizable';
 import Checkbox from '../Checkbox';
 import Pagination from '../Pagination/index';
 import Select from '../Select';
@@ -23,6 +24,8 @@ import './style/index.less';
 
 const Table: FC<TableProps> = (props) => {
   const {
+    className,
+    style,
     columns = [],
     dataSource = [],
     rowKey = 'key',
@@ -34,8 +37,8 @@ const Table: FC<TableProps> = (props) => {
     rowExpandable,
     onHeaderRow,
     onRow,
-    className,
-    style,
+    bordered = false,
+    resizable = false,
   } = props;
 
   // 行选择
@@ -142,16 +145,6 @@ const Table: FC<TableProps> = (props) => {
       );
   };
 
-  const genColStyle = (column: TableColumn) => {
-    const style: CSSProperties = {};
-    const { width } = column;
-    if (width) {
-      style.width = width;
-      style.minWidth = width;
-    }
-    return style;
-  };
-
   const genCellClassName = (column: TableColumn): string => {
     const { align = 'left', fixed } = column;
     return classNames({
@@ -178,83 +171,6 @@ const Table: FC<TableProps> = (props) => {
       style.right = rightWidth;
     }
     return style;
-  };
-
-  const renderHeadCell = (column: TableColumn, index: number) => {
-    const { dataIndex, title, sorter, filters, onHeaderCell, colSpan } = column;
-    const hasSorter = sorter === true || typeof sorter === 'function';
-    const { dataIndex: sortIndex, order: sortOrder } = sortInfo ?? {};
-    const order = sortIndex === dataIndex ? sortOrder : undefined;
-
-    const toggleSorter = () => {
-      const states = [undefined, SortOrder.Asc, SortOrder.Desc];
-      const index = states.indexOf(order);
-      const newOrder = states[(index + 1) % states.length];
-      const newSortInfo =
-        newOrder === undefined
-          ? undefined
-          : {
-              dataIndex,
-              order: newOrder,
-              compareFunc: typeof sorter === 'function' ? sorter : undefined,
-            };
-      setSortInfo(newSortInfo);
-      onChange &&
-        onChange(
-          { currentPage: internalPage, pageSize: internalPageSize },
-          newSortInfo,
-          filterInfo,
-        );
-    };
-
-    return colSpan === 0 ? null : (
-      <th
-        key={dataIndex}
-        className={genCellClassName(column)}
-        style={genCellStyle(column, index)}
-        {...(onHeaderCell ? onHeaderCell(column, index) : {})}
-        colSpan={colSpan}
-      >
-        {hasSorter ? (
-          <div className="tyro-table-sorter-wrapper" onClick={toggleSorter}>
-            {title}
-            <div className="tyro-table-sorter">
-              <IconTriangleUp
-                className={classNames({
-                  'arrow-active': order === SortOrder.Asc,
-                })}
-              />
-              <IconTriangleDown
-                className={classNames({
-                  'arrow-active': order === SortOrder.Desc,
-                })}
-              />
-            </div>
-          </div>
-        ) : (
-          <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-            {title}
-          </div>
-        )}
-        {filters && (
-          <Select
-            triggerRender={(_, selectedValue) => (
-              <IconFilter
-                className={classNames('tyro-table-filter-icon', {
-                  'tyro-table-filter-icon-active': Array.isArray(selectedValue)
-                    ? selectedValue.length > 0
-                    : selectedValue !== undefined,
-                })}
-              />
-            )}
-            optionList={filters}
-            multiple
-            onChange={(value) => handleFilterChange(dataIndex, value)}
-            position="bottom"
-          />
-        )}
-      </th>
-    );
   };
 
   const tableData = useMemo(() => {
@@ -361,6 +277,118 @@ const Table: FC<TableProps> = (props) => {
     return cols;
   }, [columns, rowSelection, selectedMap, expandedMap]);
 
+  const [colWidthMap, setColWidthMap] = useState(
+    new Map(tableColumns.map((col) => [col.dataIndex, col.width])),
+  );
+
+  const renderHeadCell = (
+    column: TableColumn,
+    index: number,
+    lastCol: boolean,
+  ) => {
+    const { dataIndex, title, sorter, filters, onHeaderCell, colSpan } = column;
+    const hasSorter = sorter === true || typeof sorter === 'function';
+    const { dataIndex: sortIndex, order: sortOrder } = sortInfo ?? {};
+    const order = sortIndex === dataIndex ? sortOrder : undefined;
+
+    const toggleSorter = () => {
+      const states = [undefined, SortOrder.Asc, SortOrder.Desc];
+      const index = states.indexOf(order);
+      const newOrder = states[(index + 1) % states.length];
+      const newSortInfo =
+        newOrder === undefined
+          ? undefined
+          : {
+              dataIndex,
+              order: newOrder,
+              compareFunc: typeof sorter === 'function' ? sorter : undefined,
+            };
+      setSortInfo(newSortInfo);
+      onChange &&
+        onChange(
+          { currentPage: internalPage, pageSize: internalPageSize },
+          newSortInfo,
+          filterInfo,
+        );
+    };
+    if (colSpan === 0) {
+      return null;
+    }
+    const headCell = (
+      <th
+        key={dataIndex}
+        className={genCellClassName(column)}
+        style={genCellStyle(column, index)}
+        {...(onHeaderCell ? onHeaderCell(column, index) : {})}
+        colSpan={colSpan}
+      >
+        {hasSorter ? (
+          <div className="tyro-table-sorter-wrapper" onClick={toggleSorter}>
+            {title}
+            <div className="tyro-table-sorter">
+              <IconTriangleUp
+                className={classNames({
+                  'arrow-active': order === SortOrder.Asc,
+                })}
+              />
+              <IconTriangleDown
+                className={classNames({
+                  'arrow-active': order === SortOrder.Desc,
+                })}
+              />
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+            {title}
+          </div>
+        )}
+        {filters && (
+          <Select
+            triggerRender={(_, selectedValue) => (
+              <IconFilter
+                className={classNames('tyro-table-filter-icon', {
+                  'tyro-table-filter-icon-active': Array.isArray(selectedValue)
+                    ? selectedValue.length > 0
+                    : selectedValue !== undefined,
+                })}
+              />
+            )}
+            optionList={filters}
+            multiple
+            onChange={(value) => handleFilterChange(dataIndex, value)}
+            position="bottom"
+          />
+        )}
+      </th>
+    );
+    const colWidth = colWidthMap.get(dataIndex);
+    return resizable && !lastCol && typeof colWidth === 'number' ? (
+      <Resizable
+        width={colWidth}
+        height={0}
+        axis="x"
+        onResize={(e, { size }) =>
+          setColWidthMap(new Map(colWidthMap).set(dataIndex, size.width))
+        }
+      >
+        {headCell}
+      </Resizable>
+    ) : (
+      headCell
+    );
+  };
+
+  const genColStyle = (column: TableColumn) => {
+    const style: CSSProperties = {};
+    const width = colWidthMap.get(column.dataIndex);
+    if (width) {
+      style.width = width;
+      style.minWidth = width;
+    }
+    return style;
+  };
+
   const renderBodyCell = (
     column: TableColumn,
     record: TableRecord,
@@ -449,7 +477,11 @@ const Table: FC<TableProps> = (props) => {
 
   return (
     <div className={classNames('tyro-table-wrapper', className)} style={style}>
-      <table className="tyro-table">
+      <table
+        className={classNames('tyro-table', {
+          'tyro-table-bordered': bordered,
+        })}
+      >
         <colgroup>
           {tableColumns.map((column) => (
             <col key={column.dataIndex} style={genColStyle(column)} />
@@ -457,7 +489,9 @@ const Table: FC<TableProps> = (props) => {
         </colgroup>
         <thead className="tyro-table-header">
           <tr {...(onHeaderRow ? onHeaderRow(columns) : {})}>
-            {tableColumns.map((column, index) => renderHeadCell(column, index))}
+            {tableColumns.map((column, index) =>
+              renderHeadCell(column, index, index === tableColumns.length - 1),
+            )}
           </tr>
         </thead>
         <tbody

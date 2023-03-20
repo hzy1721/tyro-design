@@ -7,6 +7,7 @@
   border-spacing: 0;
   text-align: left;
   width: 100%;
+  overflow-x: auto;
 
   &-wrapper {
     width: 100%;
@@ -21,6 +22,22 @@
       padding: @spacing-table_th-paddingY @spacing-table_th-paddingX;
       border-bottom: @width-table_header_border solid
         @color-table_th-border-default;
+      position: relative;
+
+      .react-resizable-handle {
+        position: absolute;
+        z-index: 1;
+        top: 4px;
+        right: -3px;
+        width: 9px;
+        height: calc(100% - 8px);
+        cursor: col-resize;
+        background-color: @semi-color-border;
+
+        &:hover {
+          background-color: @semi-color-primary;
+        }
+      }
     }
 
     th[colspan]:not([colspan='1']) {
@@ -116,6 +133,21 @@
 
     &-active {
       color: @semi-color-primary;
+    }
+  }
+
+  &.tyro-table-bordered {
+    border: 1px solid @semi-color-border;
+    border-bottom: 0;
+    border-right: 0;
+
+    th,
+    td {
+      border-right: 1px solid @semi-color-border;
+    }
+
+    th .react-resizable-handle {
+      background-color: transparent;
     }
   }
 }
