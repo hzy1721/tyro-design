@@ -10,6 +10,7 @@ import Checkbox from '../Checkbox';
 import Pagination from '../Pagination/index';
 import Select from '../Select';
 import { SelectValue } from '../Select/interface';
+import ExpandButton from './ExpandButton';
 import {
   SortInfo,
   SortOrder,
@@ -28,6 +29,9 @@ const Table: FC<TableProps> = (props) => {
     rowSelection,
     pagination,
     onChange,
+    expandedRowRender,
+    hideExpandedColumn = true,
+    rowExpandable,
     onHeaderRow,
     onRow,
     className,
@@ -35,8 +39,10 @@ const Table: FC<TableProps> = (props) => {
   } = props;
 
   // 行选择
-  const getRecordKey = (record: TableRecord) =>
-    typeof rowKey === 'function' ? record[rowKey(record)] : record[rowKey];
+  const getRecordKey = (record: TableRecord): string =>
+    typeof rowKey === 'function'
+      ? String(record[rowKey(record)])
+      : String(record[rowKey]);
   const {
     disabled: headCheckboxDisabled,
     getCheckboxProps,
@@ -75,7 +81,9 @@ const Table: FC<TableProps> = (props) => {
   } = pagination ?? {};
   const [internalPage, setInternalPage] = useState(defaultCurrentPage);
   const [internalPageSize, setInternalPageSize] = useState(pageSize);
+  // 排序
   const [sortInfo, setSortInfo] = useState<SortInfo>();
+  // 筛选
   const [filteredValueMap, setFilteredValueMap] = useState(
     new Map<string, SelectValue>(),
   );
@@ -249,84 +257,6 @@ const Table: FC<TableProps> = (props) => {
     );
   };
 
-  const renderBodyCell = (
-    column: TableColumn,
-    record: any,
-    rowIndex: number,
-    columnIndex: number,
-  ) => {
-    const { dataIndex, render, onCell } = column;
-    let content = record[dataIndex] ?? '';
-    let renderProps: { rowSpan?: number; colSpan?: number } = {};
-    if (render) {
-      const res: any = render(record[dataIndex], record, rowIndex);
-      if (typeof res === 'object' && res.hasOwnProperty('children')) {
-        renderProps = res.props;
-        content = res.children;
-      } else {
-        content = res;
-      }
-    }
-    const { rowSpan, colSpan } = renderProps;
-
-    if (rowSpan === 0 || colSpan === 0) {
-      return null;
-    }
-
-    return (
-      <td
-        key={dataIndex}
-        className={genCellClassName(column)}
-        style={genCellStyle(column, columnIndex)}
-        {...(onCell ? onCell(record, rowIndex, columnIndex) : {})}
-        rowSpan={rowSpan}
-        colSpan={colSpan}
-      >
-        {content}
-      </td>
-    );
-  };
-
-  const tableColumns = useMemo(() => {
-    const cols = cloneDeep(columns);
-    if (rowSelection) {
-      cols.unshift({
-        dataIndex: 'rowSelection',
-        title: (
-          <Checkbox
-            disabled={headCheckboxDisabled}
-            onChange={(checked) => {
-              const newSelectMap = cloneDeep(selectedMap);
-              newSelectMap.forEach((value, key) => {
-                if (rowDisabled.get(key) === false) {
-                  newSelectMap.set(key, checked);
-                }
-              });
-              setSelectedMap(newSelectMap);
-              onSelectAll && onSelectAll(checked);
-            }}
-          />
-        ),
-        render: (value, record) => (
-          <Checkbox
-            {...(getCheckboxProps ? getCheckboxProps(record) : {})}
-            checked={selectedMap.get(getRecordKey(record)) ?? false}
-            onChange={(checked) => {
-              const key = getRecordKey(record);
-              if (key) {
-                const newSelectedMap = cloneDeep(selectedMap);
-                newSelectedMap.set(key, checked);
-                setSelectedMap(newSelectedMap);
-              }
-              onSelect && onSelect(record, checked);
-            }}
-          />
-        ),
-      });
-    }
-    return cols;
-  }, [columns, rowSelection, selectedMap]);
-
   const tableData = useMemo(() => {
     let data = dataSource;
     if (onFilterMap.size) {
@@ -365,6 +295,158 @@ const Table: FC<TableProps> = (props) => {
     filteredValueMap,
   ]);
 
+  // 行展开
+  const [expandedMap, setExpandedMap] = useState(
+    new Map<string, boolean>(
+      tableData.map((record) => [getRecordKey(record), false]),
+    ),
+  );
+
+  const tableColumns = useMemo(() => {
+    const cols = cloneDeep(columns);
+    if (expandedRowRender && !hideExpandedColumn) {
+      cols.unshift({
+        dataIndex: 'rowExpanded',
+        title: '',
+        render: (value, record, rowIndex) =>
+          !rowExpandable || rowExpandable(record, rowIndex) ? (
+            <ExpandButton
+              onChange={(expanded) =>
+                setExpandedMap(
+                  new Map(expandedMap).set(getRecordKey(record), expanded),
+                )
+              }
+              icon="chevron"
+            />
+          ) : undefined,
+        width: 50,
+      });
+    }
+    if (rowSelection) {
+      cols.unshift({
+        dataIndex: 'rowSelection',
+        title: (
+          <Checkbox
+            disabled={headCheckboxDisabled}
+            onChange={(checked) => {
+              const newSelectMap = cloneDeep(selectedMap);
+              newSelectMap.forEach((value, key) => {
+                if (rowDisabled.get(key) === false) {
+                  newSelectMap.set(key, checked);
+                }
+              });
+              setSelectedMap(newSelectMap);
+              onSelectAll && onSelectAll(checked);
+            }}
+          />
+        ),
+        render: (value, record) => (
+          <Checkbox
+            {...(getCheckboxProps ? getCheckboxProps(record) : {})}
+            checked={selectedMap.get(getRecordKey(record)) ?? false}
+            onChange={(checked) => {
+              const key = getRecordKey(record);
+              if (key) {
+                const newSelectedMap = cloneDeep(selectedMap);
+                newSelectedMap.set(key, checked);
+                setSelectedMap(newSelectedMap);
+              }
+              onSelect && onSelect(record, checked);
+            }}
+          />
+        ),
+        width: 50,
+      });
+    }
+    return cols;
+  }, [columns, rowSelection, selectedMap, expandedMap]);
+
+  const renderBodyCell = (
+    column: TableColumn,
+    record: TableRecord,
+    rowIndex: number,
+    columnIndex: number,
+  ) => {
+    const { dataIndex, render, onCell } = column;
+    let content = record[dataIndex] ?? '';
+    let renderProps: { rowSpan?: number; colSpan?: number } = {};
+    if (render) {
+      const res: any = render(record[dataIndex], record, rowIndex);
+      if (typeof res === 'object' && res.hasOwnProperty('children')) {
+        renderProps = res.props;
+        content = res.children;
+      } else {
+        content = res;
+      }
+    }
+    const { rowSpan, colSpan } = renderProps;
+    if (rowSpan === 0 || colSpan === 0) {
+      return null;
+    }
+    let firstIndex = 0;
+    if (rowSelection) {
+      firstIndex += 1;
+    }
+    return (
+      <td
+        key={dataIndex}
+        className={genCellClassName(column)}
+        style={genCellStyle(column, columnIndex)}
+        {...(onCell ? onCell(record, rowIndex, columnIndex) : {})}
+        rowSpan={rowSpan}
+        colSpan={colSpan}
+      >
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            verticalAlign: 'middle',
+          }}
+        >
+          {expandedRowRender &&
+            hideExpandedColumn &&
+            columnIndex === firstIndex &&
+            (!rowExpandable || rowExpandable(record, rowIndex) ? (
+              <ExpandButton
+                onChange={(expanded) =>
+                  setExpandedMap(
+                    new Map(expandedMap).set(getRecordKey(record), expanded),
+                  )
+                }
+              />
+            ) : (
+              <div style={{ width: 19 }}></div>
+            ))}
+          {content}
+        </div>
+      </td>
+    );
+  };
+
+  const renderBodyRow = (record: TableRecord, rowIndex: number) => (
+    <>
+      <tr
+        key={getRecordKey(record) ?? rowIndex}
+        {...(onRow ? onRow(record, rowIndex) : {})}
+      >
+        {tableColumns.map((column, columnIndex) =>
+          renderBodyCell(column, record, rowIndex, columnIndex),
+        )}
+      </tr>
+      {expandedRowRender && expandedMap.get(getRecordKey(record)) === true && (
+        <tr
+          className="tyro-table-expanded-row"
+          key={`${getRecordKey(record) ?? rowIndex}_expanded`}
+        >
+          <td colSpan={tableColumns.length}>
+            {expandedRowRender && expandedRowRender(record, rowIndex)}
+          </td>
+        </tr>
+      )}
+    </>
+  );
+
   return (
     <div className={classNames('tyro-table-wrapper', className)} style={style}>
       <table className="tyro-table">
@@ -382,16 +464,7 @@ const Table: FC<TableProps> = (props) => {
           className="tyro-table-body"
           style={{ maxHeight: `calc(100% - ${39 + (pagination ? 32 : 0)}px)` }}
         >
-          {tableData.map((record, rowIndex) => (
-            <tr
-              key={getRecordKey(record) ?? rowIndex}
-              {...(onRow ? onRow(record, rowIndex) : {})}
-            >
-              {tableColumns.map((column, columnIndex) =>
-                renderBodyCell(column, record, rowIndex, columnIndex),
-              )}
-            </tr>
-          ))}
+          {tableData.map((record, rowIndex) => renderBodyRow(record, rowIndex))}
         </tbody>
       </table>
       {pagination && (

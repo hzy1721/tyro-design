@@ -365,6 +365,76 @@ onChange?: (
 ) => void;
 ```
 
+## 行展开
+
+通过`expandedRowRender`指定行展开的内容。
+
+- 设置`hideExpandedColumn`为`false`将展开按钮单独渲染为一列
+- 通过`rowExpandable`决定是否渲染某一行的展开按钮
+
+```jsx
+import { Table } from 'tyro-design';
+
+const columns = [
+  {
+    dataIndex: 'groupId',
+    title: '队伍 ID',
+  },
+  {
+    dataIndex: 'groupName',
+    title: '队伍名称',
+    align: 'center',
+  },
+  {
+    dataIndex: 'groupMemberNum',
+    title: '队伍人数',
+    align: 'right',
+  },
+  {
+    dataIndex: 'groupScore',
+    title: '队伍成绩',
+    align: 'left',
+    width: 400,
+  },
+];
+
+const dataSource = [
+  {
+    key: '1',
+    groupId: 1111,
+    groupName: 'SSR 小队',
+    groupMemberNum: 3,
+    groupScore: 80,
+  },
+  {
+    key: '2',
+    groupId: 2222,
+    groupName: '组件库小队',
+    groupMemberNum: 4,
+    groupScore: 85,
+  },
+  {
+    key: '3',
+    groupId: 3333,
+    groupName: '可视化小队',
+    groupMemberNum: 5,
+    groupScore: 90,
+  },
+];
+
+export default () => (
+  <Table
+    columns={columns}
+    dataSource={dataSource}
+    rowSelection={{}}
+    expandedRowRender={(record) =>
+      `「${record.groupName}」取得了 ${record.groupScore} 分的好成绩`
+    }
+    rowExpandable={(record) => record.groupId !== 3333}
+  />
+);
+```
+
 ## 自定义行属性
 
 使用`onHeaderRow`和`onRow`可以对`thead`和`tbody`部分的`tr`元素添加自定义属性。

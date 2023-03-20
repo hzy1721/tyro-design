@@ -60,6 +60,9 @@ export interface TableProps extends BaseProps {
       filteredValue: SelectValue;
     }>,
   ) => void;
+  expandedRowRender?: (record: TableRecord, index: number) => ReactNode;
+  hideExpandedColumn?: boolean;
+  rowExpandable?: (record: TableRecord, index: number) => boolean;
   onHeaderRow?: (columns: TableColumn[]) => Record<string, any>;
   onRow?: (record: any, index: number) => Record<string, any>;
 }
