@@ -17,7 +17,7 @@ group:
 import { Tooltip, Button } from 'tyro-design';
 
 export default () => (
-  <Tooltip content="提示文本" position="topLeft">
+  <Tooltip content="提示文本">
     <Button>悬停以显示</Button>
   </Tooltip>
 );
