@@ -1,3 +1,9 @@
+---
+group:
+  title: 输入类
+  order: 2
+---
+
 # Select
 
 下拉选择组件。

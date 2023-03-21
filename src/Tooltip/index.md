@@ -1,6 +1,7 @@
 ---
 group:
-  title: 数据展示
+  title: 展示类
+  order: 4
 ---
 
 # Tooltip

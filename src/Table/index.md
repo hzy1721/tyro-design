@@ -1,3 +1,9 @@
+---
+group:
+  title: 展示类
+  order: 4
+---
+
 # Table
 
 表格组件。

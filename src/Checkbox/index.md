@@ -1,3 +1,9 @@
+---
+group:
+  title: 输入类
+  order: 2
+---
+
 # Checkbox
 
 复选框组件。

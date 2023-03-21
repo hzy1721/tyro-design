@@ -11,3 +11,5 @@ export { default as Space } from './Space';
 export { default as Table } from './Table';
 export { default as Tag } from './Tag';
 export { default as Tooltip } from './Tooltip';
+
+import './style/index.css';

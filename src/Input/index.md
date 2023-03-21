@@ -1,3 +1,9 @@
+---
+group:
+  title: 输入类
+  order: 2
+---
+
 # Input
 
 输入框组件。

@@ -1,3 +1,9 @@
+---
+group:
+  title: 导航类
+  order: 3
+---
+
 # Pagination
 
 分页组件。

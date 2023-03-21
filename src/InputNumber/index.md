@@ -1,3 +1,9 @@
+---
+group:
+  title: 输入类
+  order: 2
+---
+
 # InputNumber
 
 数字输入框组件。
@@ -7,7 +13,7 @@
 ```jsx
 import { InputNumber } from 'tyro-design';
 
-export default () => <InputNumber defaultValue={123} onChange={alert} />;
+export default () => <InputNumber defaultValue={123} />;
 ```
 
 ## API
