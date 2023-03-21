@@ -65,6 +65,11 @@ export interface TableProps extends BaseProps {
   rowExpandable?: (record: TableRecord, index: number) => boolean;
   bordered?: boolean;
   resizable?: boolean;
+  groupBy?: string | ((record: TableRecord) => string);
+  renderGroupSection?: (
+    groupKey: string | number,
+    group: string[] | number[],
+  ) => ReactNode;
   onHeaderRow?: (columns: TableColumn[]) => Record<string, any>;
   onRow?: (record: any, index: number) => Record<string, any>;
 }

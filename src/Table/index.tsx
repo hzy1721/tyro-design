@@ -39,6 +39,8 @@ const Table: FC<TableProps> = (props) => {
     onRow,
     bordered = false,
     resizable = false,
+    groupBy,
+    renderGroupSection,
   } = props;
 
   // 行选择
@@ -175,6 +177,7 @@ const Table: FC<TableProps> = (props) => {
 
   const tableData = useMemo(() => {
     let data = dataSource;
+    // 本地筛选
     if (onFilterMap.size) {
       data = data.filter((record) => {
         for (const [dataIndex, onFilter] of onFilterMap) {
@@ -189,12 +192,14 @@ const Table: FC<TableProps> = (props) => {
         return true;
       });
     }
+    // 本地排序
     const { order, compareFunc } = sortInfo ?? {};
     if (compareFunc) {
       const cmpFn = (a: any, b: any) =>
         order === SortOrder.Asc ? compareFunc(a, b) : compareFunc(b, a);
       data.sort(cmpFn);
     }
+    // 本地分页
     if (pagination) {
       data = data.slice(
         internalPageSize * (internalPage - 1),
@@ -210,6 +215,25 @@ const Table: FC<TableProps> = (props) => {
     sortInfo,
     filteredValueMap,
   ]);
+
+  const groupInfo = useMemo(() => {
+    if (!groupBy) {
+      return [];
+    }
+    const info: any[] = [];
+    const keyIndexMap = new Map<string, number>();
+    tableData.forEach((record) => {
+      const key = typeof groupBy === 'function' ? groupBy(record) : groupBy;
+      const groupKey: string = record[key];
+      if (!keyIndexMap.has(groupKey)) {
+        keyIndexMap.set(groupKey, info.length);
+        info.push([groupKey, [], key]);
+      }
+      const groupIndex = keyIndexMap.get(groupKey)!;
+      info[groupIndex][1].push(record);
+    });
+    return info;
+  }, [groupBy, tableData]);
 
   // 行展开
   const [expandedMap, setExpandedMap] = useState(
@@ -475,6 +499,44 @@ const Table: FC<TableProps> = (props) => {
     </>
   );
 
+  const [groupExpandMap, setGroupExpandMap] = useState(
+    new Map<string, boolean>(groupInfo.map(([groupKey]) => [groupKey, false])),
+  );
+
+  const renderGroupRows = (group: any) => {
+    const [groupKey, groupItems, key] = group;
+    const groupValues = groupItems.map((item: any) => item[key]);
+
+    return (
+      <>
+        <tr>
+          <td
+            className="tyro-table-group-title-cell"
+            colSpan={tableColumns.length}
+          >
+            <div className="tyro-table-group-title">
+              <ExpandButton
+                icon="chevron"
+                onChange={(expanded) =>
+                  setGroupExpandMap(
+                    new Map(groupExpandMap).set(groupKey, expanded),
+                  )
+                }
+              />
+              {renderGroupSection
+                ? renderGroupSection(groupKey, groupValues)
+                : groupKey}
+            </div>
+          </td>
+        </tr>
+        {groupExpandMap.get(groupKey) === true &&
+          groupItems.map((record: any, rowIndex: number) =>
+            renderBodyRow(record, rowIndex),
+          )}
+      </>
+    );
+  };
+
   return (
     <div className={classNames('tyro-table-wrapper', className)} style={style}>
       <table
@@ -498,7 +560,11 @@ const Table: FC<TableProps> = (props) => {
           className="tyro-table-body"
           style={{ maxHeight: `calc(100% - ${39 + (pagination ? 32 : 0)}px)` }}
         >
-          {tableData.map((record, rowIndex) => renderBodyRow(record, rowIndex))}
+          {groupBy
+            ? groupInfo.map((group) => renderGroupRows(group))
+            : tableData.map((record, rowIndex) =>
+                renderBodyRow(record, rowIndex),
+              )}
         </tbody>
       </table>
       {pagination && (

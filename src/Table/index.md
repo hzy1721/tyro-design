@@ -582,6 +582,50 @@ export default () => (
 );
 ```
 
+## 分组
+
+```jsx
+import { Table } from 'tyro-design';
+
+const columns = [
+  {
+    dataIndex: 'title',
+    title: '标题',
+  },
+  {
+    dataIndex: 'author',
+    title: '作者',
+    width: 300,
+  },
+];
+
+const dataSource = [
+  {
+    title: 'dynamicgo 开源：基于原始字节流的高性能+动态化 Go 数据处理',
+    author: '字节跳动技术团队',
+  },
+  {
+    title: 'AntV 你的保姆级数据可视化解决方案',
+    author: '支付宝体验科技',
+  },
+  {
+    title: '火山引擎 DataLeap：揭秘字节跳动业务背后的分布式数据治理思路',
+    author: '字节跳动技术团队',
+  },
+];
+
+export default () => (
+  <Table
+    columns={columns}
+    dataSource={dataSource}
+    groupBy="author"
+    renderGroupSection={(groupKey, group) =>
+      `公众号：${groupKey}（${group.length} 篇文章）`
+    }
+  />
+);
+```
+
 ## 表头列合并
 
 使用`TableColumn.colSpan`实现表头的列合并，注意对于空间被占用的列，需要手动声明`colSpan`为`0`。
