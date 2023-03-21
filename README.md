@@ -1,17 +1,6 @@
 # tyro-design
 
-[![NPM version](https://img.shields.io/npm/v/tyro-design.svg?style=flat)](https://npmjs.org/package/tyro-design)
-[![NPM downloads](http://img.shields.io/npm/dm/tyro-design.svg?style=flat)](https://npmjs.org/package/tyro-design)
-
-A react component library
-
-## Usage
-
-TODO
-
-## Options
-
-TODO
+React 组件库
 
 ## Development
 
