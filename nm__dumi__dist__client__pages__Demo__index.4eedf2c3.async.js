@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunktyro_design=self.webpackChunktyro_design||[]).push([[9],{12535:function(i,n,e){e.r(n),e.d(n,{default:function(){return d}});var t=e(4982),o=e(67294),r=function(){var s=(0,t.UO)(),u=s.id,m=(0,t.WF)(),c=m.demos,f=c[u]||{},a=f.component;return a&&(0,o.createElement)(a)},d=r}}]);
