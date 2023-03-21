@@ -439,6 +439,11 @@ const Table: FC<TableProps> = (props) => {
     if (rowSelection) {
       firstIndex += 1;
     }
+    const showExpandButton =
+      expandedRowRender &&
+      hideExpandedColumn &&
+      columnIndex === firstIndex &&
+      (!rowExpandable || rowExpandable(record, rowIndex));
     return (
       <td
         key={dataIndex}
@@ -449,27 +454,28 @@ const Table: FC<TableProps> = (props) => {
         colSpan={colSpan}
       >
         <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            verticalAlign: 'middle',
-          }}
-        >
-          {expandedRowRender &&
-            hideExpandedColumn &&
-            columnIndex === firstIndex &&
-            (!rowExpandable || rowExpandable(record, rowIndex) ? (
-              <ExpandButton
-                onChange={(expanded) =>
-                  setExpandedMap(
-                    new Map(expandedMap).set(getRecordKey(record), expanded),
-                  )
+          style={
+            showExpandButton
+              ? {
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  verticalAlign: 'middle',
                 }
-              />
-            ) : (
-              <div style={{ width: 19 }}></div>
-            ))}
+              : undefined
+          }
+        >
+          {showExpandButton ? (
+            <ExpandButton
+              onChange={(expanded) =>
+                setExpandedMap(
+                  new Map(expandedMap).set(getRecordKey(record), expanded),
+                )
+              }
+            />
+          ) : (
+            <div style={{ width: 19 }}></div>
+          )}
           {content}
         </div>
       </td>
