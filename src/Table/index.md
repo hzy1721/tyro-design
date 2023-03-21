@@ -766,14 +766,23 @@ export default () => <Table columns={columns} dataSource={dataSource} />;
 
 ## API
 
-| 属性          | 说明                                         | 类型                                                                                      | 默认值  |
-| :------------ | :------------------------------------------- | :---------------------------------------------------------------------------------------- | :------ |
-| `columns`     | 表格列的配置描述                             | `TableColumn[]`                                                                           | `[]`    |
-| `dataSource`  | 数据                                         | `TableRecord[]`                                                                           | `[]`    |
-| `rowKey`      | 表格行 key 的取值，可以是字符串或一个函数    | `string                                               \| (record: TableRecord) => string` | `'key'` |
-| `pagination`  | 分页组件配置                                 | `PaginationProps`                                                                         |         |
-| `onHeaderRow` | 设置头部行属性，返回的对象会被合并传给表头行 | `(columns: TableColumn[]) => Record<string, any>`                                         |         |
-| `onRow`       | 设置行属性，返回的对象会被合并传给表格行     | `(record: any, index: number) => Record<string, any>`                                     |         |
+| 属性                 | 说明                                         | 类型                                                                                                                                                                                                                 | 默认值  |
+| :------------------- | :------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| `columns`            | 表格列的配置描述                             | `TableColumn[]`                                                                                                                                                                                                      | `[]`    |
+| `dataSource`         | 数据                                         | `TableRecord[]`                                                                                                                                                                                                      | `[]`    |
+| `rowKey`             | 表格行 key 的取值，可以是字符串或一个函数    | `string                                               \| (record: TableRecord) => string`                                                                                                                            | `'key'` |
+| `rowSelection`       | 行选择配置                                   | `TableRowSelection`                                                                                                                                                                                                  |         |
+| `pagination`         | 分页配置                                     | `PaginationProps`                                                                                                                                                                                                    |         |
+| `onChange`           | 分页、排序、筛选变化的回调函数               | `(pagination?: { currentPage: number; pageSize: number }, sorter?: { dataIndex: string; order: SortOrder }, filters?: Array<{ dataIndex: string; filteredValue: SelectValue; }>) => void`                            |         |
+| `expandedRowRender`  | 行展开内容的渲染函数                         | `(record: TableRecord, index: number) => ReactNode`                                                                                                                                                                  |         |
+| `hideExpandedColumn` | 是否把展开按钮渲染到第一列而不是单独渲染一列 | `boolean`                                                                                                                                                                                                            | `true`  |
+| `rowExpandable`      | 决定哪些行可以展开                           | `(record: TableRecord, index: number) => boolean`                                                                                                                                                                    |         |
+| `bordered`           | 是否为表格添加边框                           | `boolean`                                                                                                                                                                                                            | `false` |
+| `resizable`          | 是否开启可伸缩列                             | `boolean`                                                                                                                                                                                                            | `false` |
+| `groupBy`            | 分组依赖的键                                 | `string \| ((record: TableRecord) => string)`                                                                                                                                                                        |         |
+| `renderGroupSection` | 分组标题行的渲染函数                         | `(groupKey: string \| number, group: string[]                                                                                                                                             \| number[]) => ReactNode` |         |
+| `onHeaderRow`        | 设置头部行属性，返回的对象会被合并传给表头行 | `(columns: TableColumn[]) => Record<string, any>`                                                                                                                                                                    |         |
+| `onRow`              | 设置行属性，返回的对象会被合并传给表格行     | `(record: any, index: number) => Record<string, any>`                                                                                                                                                                |         |
 
 ### TableColumn
 
@@ -788,6 +797,8 @@ export default () => <Table columns={columns} dataSource={dataSource} />;
 | `width`        | 列宽度                                                                                        | `string \| number`                                                            |          |
 | `fixed`        | 列是否固定                                                                                    | `boolean \| 'left' \| 'right'`                                                | `false`  |
 | `sorter`       | 排序函数，本地排序使用一个函数(参考 Array.sort 的 compareFunction)，需要服务端排序可设为 true | `boolean \| (r1: any, r2: any) => number`                                     | `true`   |
+| `filters`      | 筛选的菜单项                                                                                  | `SelectOptionListItem[]`                                                      | `[]`     |
+| `onFilter`     | 本地筛选函数，确定哪些记录满足筛选要求                                                        | `(filteredValue: SelectValue, record: TableRecord) => boolean`                |          |
 | `onHeaderCell` | 设置头部单元格属性                                                                            | `(column: TableColumn, columnIndex: number) => Record<string, any>`           |          |
 | `onCell`       | 设置单元格属性                                                                                | `(record: any, rowIndex: number, columnIndex: number) => Record<string, any>` |          |
 | `colSpan`      | 表头列合并，设置为 0 时不渲染                                                                 | `number`                                                                      |          |
@@ -800,3 +811,12 @@ export interface TableRecord {
   [x: string]: any;
 }
 ```
+
+### TableRowSelection
+
+| 属性               | 说明                                      | 类型                                               | 默认值  |
+| :----------------- | :---------------------------------------- | :------------------------------------------------- | :------ |
+| `disabled`         | 是否禁用表头的全选 Checkbox               | `boolean`                                          | `false` |
+| `getCheckboxProps` | 自定义每一行 Checkbox 的属性              | `(record: TableRecord) => CheckboxProps`           |         |
+| `onSelect`         | 选中/取消选中某一行 Checkbox 的回调函数   | `(record: TableRecord, selected: boolean) => void` |         |
+| `onSelectAll`      | 选中/取消选中表头全选 Checkbox 的回调函数 | `(selected: boolean) => void`                      |         |
