@@ -4,7 +4,6 @@ export default defineConfig({
   outputPath: 'docs-dist',
   themeConfig: {
     name: 'Tyro Design',
-    logo: '/logo.png',
     nav: [{ title: '文档', link: '/components' }],
     prefersColor: { default: 'light', switch: false },
     socialLinks: {
