@@ -25,9 +25,7 @@ export default () => (
   >
     <Space>
       <Button type="primary">反馈问题</Button>
-      <Button type="primary" status="danger">
-        发起投诉
-      </Button>
+      <Button type="danger">发起投诉</Button>
     </Space>
   </Empty>
 );
@@ -51,9 +49,7 @@ export default () => (
   >
     <Space>
       <Button type="primary">反馈问题</Button>
-      <Button type="primary" status="danger">
-        发起投诉
-      </Button>
+      <Button type="danger">发起投诉</Button>
     </Space>
   </Empty>
 );
