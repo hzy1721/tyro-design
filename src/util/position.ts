@@ -1,25 +1,19 @@
 export const getElementTop = (element: HTMLElement | null) => {
-  if (!element) {
-    return 0;
+  let top = 0;
+  let elem = element;
+  while (elem) {
+    top += elem.offsetTop;
+    elem = elem.offsetParent as HTMLElement | null;
   }
-  let actualTop = element.offsetTop;
-  let current = element.offsetParent as HTMLElement;
-  while (current !== null) {
-    actualTop += current.offsetTop;
-    current = current.offsetParent as HTMLElement;
-  }
-  return actualTop;
+  return top;
 };
 
 export const getElementLeft = (element: HTMLElement | null) => {
-  if (!element) {
-    return 0;
+  let left = 0;
+  let elem = element;
+  while (elem) {
+    left += elem.offsetLeft;
+    elem = elem.offsetParent as HTMLElement | null;
   }
-  let actualLeft = element.offsetLeft;
-  let current = element.offsetParent as HTMLElement;
-  while (current !== null) {
-    actualLeft += current.offsetLeft;
-    current = current.offsetParent as HTMLElement;
-  }
-  return actualLeft;
+  return left;
 };
