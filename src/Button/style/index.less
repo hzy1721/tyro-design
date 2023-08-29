@@ -9,6 +9,9 @@
   height: @height-button_default;
   font-weight: @font-button-fontWeight;
   cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     background-color: @color-button_primary-bg-hover;
@@ -82,5 +85,93 @@
       background-color: @color-button_danger-bg-active;
       border-color: @color-button_danger-border-active;
     }
+  }
+
+  &-light {
+    border-color: @color-button_light-border-default;
+    background-color: @color-button_light-bg-default;
+
+    &:hover {
+      background-color: @color-button_light-bg-hover;
+    }
+
+    &:active {
+      background-color: @color-button_light-bg-active;
+    }
+
+    &.tyro-button-primary {
+      color: @color-button_primary-bg-default;
+    }
+
+    &.tyro-button-secondary {
+      color: @color-button_secondary-bg-default;
+    }
+
+    &.tyro-button-tertiary {
+      color: @color-button_tertiary-bg-default;
+    }
+
+    &.tyro-button-warning {
+      color: @color-button_warning-bg-default;
+    }
+
+    &.tyro-button-danger {
+      color: @color-button_danger-bg-default;
+    }
+  }
+
+  &-borderless {
+    border-color: @color-button_borderless-border-default;
+    background-color: @color-button_borderless-bg-default;
+
+    &:hover {
+      background-color: @color-button_borderless-bg-hover;
+    }
+
+    &:active {
+      background-color: @color-button_borderless-bg-active;
+    }
+
+    &.tyro-button-primary {
+      color: @color-button_primary-bg-default;
+    }
+
+    &.tyro-button-secondary {
+      color: @color-button_secondary-bg-default;
+    }
+
+    &.tyro-button-tertiary {
+      color: @color-button_tertiary-bg-default;
+    }
+
+    &.tyro-button-warning {
+      color: @color-button_warning-bg-default;
+    }
+
+    &.tyro-button-danger {
+      color: @color-button_danger-bg-default;
+    }
+  }
+
+  &-small {
+    height: @height-button_small;
+    padding: @spacing-button_small-paddingY @spacing-button_small-paddingX;
+
+    &.tyro-button-icon-only {
+      padding: @spacing-button_iconOnly_small-padding;
+    }
+  }
+
+  &-large {
+    height: @height-button_large;
+    padding: @spacing-button_large-paddingY @spacing-button_large-paddingX;
+
+    &.tyro-button-icon-only {
+      padding: @spacing-button_iconOnly_large-padding;
+    }
+  }
+
+  &-icon-only {
+    padding: @spacing-button_iconOnly_default-padding;
   }
 }
