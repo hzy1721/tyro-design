@@ -1,10 +1,10 @@
-import { PortalPosition } from '../interface';
+import { PopupPosition } from '../interface';
 import { PortalElementRect } from './useElementRect';
 
 export const useContentPosition = (
   childrenRect: PortalElementRect | null,
   contentRect: PortalElementRect | null,
-  position: PortalPosition,
+  position: PopupPosition,
   spacing: number,
 ): [number, number] => {
   const childrenWidth = childrenRect?.width ?? 0;

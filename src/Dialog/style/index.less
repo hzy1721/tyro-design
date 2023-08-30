@@ -1,0 +1,56 @@
+@import './variable.less';
+
+.tyro-modal {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  &-mask {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: @color-modal_mask-bg;
+  }
+}
+
+.tyro-dialog {
+  margin: 0 auto;
+  border: @width-modal_content-border solid @color-modal_content-border;
+  border-radius: @radius-modal_content;
+  padding: @spacing-modal_content-paddingY @spacing-modal_content-paddingX;
+  background-color: @color-modal-bg;
+  font-size: 14px;
+
+  &-small {
+    width: @width-dialog_small;
+  }
+
+  &-medium {
+    width: @width-dialog_medium;
+  }
+
+  &-larget {
+    width: @width-dialog_large;
+  }
+
+  &-header {
+    margin: @spacing-modal_header-marginY @spacing-modal_header-marginX;
+    font-size: @font-modal_header-fontSize;
+    font-weight: @font-modal_header-fontWeight;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-close {
+    cursor: pointer;
+  }
+
+  &-footer {
+    margin: @spacing-modal_footer-marginY @spacing-modal_footer-marginX;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Portal from '../util/Portal';
+import Popup from '../util/Popup';
 import DropdownItem from './DropdownItem';
 import { DropdownProps } from './interface';
 
@@ -11,7 +11,7 @@ const Dropdown: FC<DropdownProps> = (props) => {
   const { menu = [], maxCount = 8, showTick = false, ...rest } = props;
 
   return (
-    <Portal
+    <Popup
       {...rest}
       content={
         <div

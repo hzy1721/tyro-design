@@ -67,6 +67,6 @@ export default () => (
 | `name`      | 名称             | `string`            |        |
 | `onClick`   | 点击事件回调函数 | `MouseEventHandler` |        |
 | `className` | 自定义类名       | `string`            |        |
-| `style`     | 自定义样式       | `CSSPropertie`      |        |
+| `style`     | 自定义样式       | `CSSProperties`     |        |
 | `active`    | 是否选中         | `boolean`           |        |
 | `showTick`  | 是否显示选中对勾 | `boolean`           |        |
