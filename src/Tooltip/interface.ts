@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { PortalProps } from '../util/Portal/interface';
+import { PopupProps } from '../util/Popup/interface';
 
-export interface TooltipProps extends Omit<PortalProps, 'content'> {
+export interface TooltipProps extends Omit<PopupProps, 'content'> {
   content?: ReactNode;
 }

@@ -1,0 +1,34 @@
+@import '../../style/semi/variable.less';
+
+// width
+@width-switch: 40px;
+@width-switch_knob_default: 18px;
+@width-switch_knob_expand: 6px;
+@width-switch_knob_active: @width-switch_knob_default +
+  @width-switch_knob_expand;
+
+// height
+@height-switch: 24px;
+
+// radius
+@radius-switch: @height-switch * 0.5;
+
+// color
+@color-switch_default-bg-default: @semi-color-fill-0;
+@color-switch_default-bg-hover: @semi-color-fill-1;
+@color-switch_default-bg-active: @semi-color-fill-2;
+@color-switch_default-border-default: transparent;
+@color-switch_knob-bg-default: rgba(@semi-white, 1);
+@color-switch_checked-bg-default: @semi-color-success;
+@color-switch_checked-bg-hover: @semi-color-success-hover;
+@color-switch_checked-bg-active: @semi-color-success-active;
+
+// spacing
+@spacing-switch_knob-padding: 2px;
+@spacing-switch_unchecked-translateX: 2px;
+@spacing-switch_checked-translateX: 18px;
+@spacing-switch_checked-translateX-active: @spacing-switch_checked-translateX -
+  @width-switch_knob_expand;
+
+// motion
+@motion-switch-transitionDuration: 200ms;
