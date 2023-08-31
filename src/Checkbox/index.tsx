@@ -14,6 +14,7 @@ const Checkbox: FC<CheckboxProps> = (props) => {
     onChange,
     disabled = false,
   } = props;
+
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
 
   useEffect(() => {

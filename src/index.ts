@@ -9,6 +9,7 @@ export { default as Pagination } from './Pagination';
 export { default as Popover } from './Popover';
 export { default as Select } from './Select';
 export { default as Space } from './Space';
+export { default as Switch } from './Switch';
 export { default as Table } from './Table';
 export { default as Tag } from './Tag';
 export { default as Tooltip } from './Tooltip';

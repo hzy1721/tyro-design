@@ -1,3 +1,3 @@
-import { PortalProps } from '../util/Portal/interface';
+import { PopupProps } from '../util/Popup/interface';
 
-export type PopoverProps = PortalProps;
+export type PopoverProps = PopupProps;

@@ -1,0 +1,57 @@
+@import './variable.less';
+
+.tyro-switch {
+  width: @width-switch;
+  height: @height-switch;
+  border-radius: @radius-switch;
+  border: 1px solid @color-switch_default-border-default;
+  box-sizing: border-box;
+  background-color: @color-switch_default-bg-default;
+  position: relative;
+  cursor: pointer;
+  transition: background-color @motion-switch-transitionDuration ease-in;
+
+  &:hover {
+    background-color: @color-switch_default-bg-hover;
+  }
+
+  &:active {
+    background-color: @color-switch_default-bg-active;
+
+    > .tyro-switch-knob {
+      width: @width-switch_knob_active;
+    }
+  }
+
+  &-knob {
+    width: @width-switch_knob_default;
+    height: @width-switch_knob_default;
+    border-radius: @width-switch_knob_default * 0.5;
+    background-color: @color-switch_knob-bg-default;
+    position: absolute;
+    top: @spacing-switch_knob-padding;
+    transform: translateX(@spacing-switch_unchecked-translateX);
+    transition: width @motion-switch-transitionDuration ease-in-out,
+      transform @motion-switch-transitionDuration ease-in-out;
+  }
+
+  &-checked {
+    background-color: @color-switch_checked-bg-default;
+
+    &:hover {
+      background-color: @color-switch_checked-bg-hover;
+    }
+
+    &:active {
+      background-color: @color-switch_checked-bg-active;
+
+      > .tyro-switch-knob {
+        transform: translateX(@spacing-switch_checked-translateX-active);
+      }
+    }
+
+    > .tyro-switch-knob {
+      transform: translateX(@spacing-switch_checked-translateX);
+    }
+  }
+}
