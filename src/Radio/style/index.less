@@ -1,0 +1,99 @@
+@import './variable.less';
+
+.tyro-radio {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+
+  &-inner {
+    box-sizing: border-box;
+    width: @width-radio_inner;
+    height: @width-radio_inner;
+    border: @width-radio_innder-border solid @color-radio_default-border-default;
+    border-radius: 50%;
+    background-color: @color-radio_default-bg-default;
+  }
+
+  &-content {
+    padding-left: @spacing-radio_addon-paddingLeft;
+  }
+
+  &:hover {
+    > .tyro-radio-inner {
+      border-color: @color-radio_default-border-hover;
+      background-color: @color-radio_default-bg-hover;
+    }
+  }
+
+  &:active {
+    > .tyro-radio-inner {
+      background-color: @color-radio_default-bg-active;
+    }
+  }
+
+  &-checked {
+    > .tyro-radio-inner {
+      border: 5px solid @color-radio_checked-border-default;
+    }
+
+    &:hover {
+      > .tyro-radio-inner {
+        border-color: @color-radio_checked-border-hover;
+      }
+
+      &.tyro-radio-disabled {
+        > .tyro-radio-inner {
+          border-color: @color-radio_checked-border-disabled;
+        }
+      }
+    }
+
+    &:active {
+      > .tyro-radio-inner {
+        border-color: @color-radio_checked-border-active;
+      }
+
+      &.tyro-radio-disabled {
+        > .tyro-radio-inner {
+          border-color: @color-radio_checked-border-disabled;
+        }
+      }
+    }
+
+    &.tyro-radio-disabled {
+      > .tyro-radio-inner {
+        border-color: @color-radio_checked-border-disabled;
+      }
+    }
+  }
+
+  &-disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+
+    > .tyro-radio-inner {
+      background-color: @color-radio_disabled-bg-default;
+    }
+
+    > .tyro-radio-content {
+      color: @color-radio_disabled-text-default;
+    }
+
+    &:hover {
+      > .tyro-radio-inner {
+        border-color: @color-radio_default-border-default;
+        background-color: @color-radio_disabled-bg-default;
+      }
+    }
+
+    &:active {
+      > .tyro-radio-inner {
+        border-color: @color-radio_default-border-default;
+        background-color: @color-radio_disabled-bg-default;
+      }
+    }
+  }
+}
